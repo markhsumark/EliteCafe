@@ -1,5 +1,4 @@
 const AIRTABLE_API_KEY = 'keydkLuej5kiWSXDO'
-var app = document.getElementById('root');
 
 var Airtable = require('airtable');
 Airtable.configure({
@@ -9,10 +8,9 @@ Airtable.configure({
 // const app = document.getElementById('root');
 var base = Airtable.base('appZMeryAPbdoYdnn');
 
-$.fn.getData = function(){
+$.fn.getAirtbData = function(){
     base('銷售紀錄').select({
     // Selecting the first 3 records in Grid view:
-        maxRecords: 5,
         view: "Grid view"
     }).eachPage(function page(records, fetchNextPage) {
         // This function (`page`) will get called for each page of records.
@@ -22,11 +20,10 @@ $.fn.getData = function(){
             const count = record.get('數量')
             const price = record.get('金額')
             console.log('Retrieved', record.get('飲品'));
-            const p = document.createElement('p');
-            p.textContent = "時間"+ time + drink +","+ count + "杯, $"+ price;
-            app.appendChild(p);
-
+            const p = $('<p></p>').text("時間"+ time + drink +","+ count + "杯, $"+ price);
+            history.append(p);
         });
+
 
         // To fetch the next page of records, call `fetchNextPage`.
         // If there are more records, `page` will get called again.
@@ -37,3 +34,19 @@ $.fn.getData = function(){
         if (err) { console.error(err); return; }
     });
 }
+
+// GET 飲品售價 並從在localStorage
+$.fn.getAirtbPrice = function(){
+    base('售價').select({
+        view: "Grid view",
+    }).eachPage(function page(records, fetchNextPage){
+        records.forEach(function(record){
+            const drinkName = record.get('品項');
+            const drinkPrice = parseInt(record.get('價位'));
+            console.log("售價：" + drinkName , drinkPrice);
+            localStorage.setItem(drinkName, drinkPrice);
+        
+        })
+    })
+}
+
