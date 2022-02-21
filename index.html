@@ -15,10 +15,10 @@
     <center>
       <div id="root" class = "main container" >
         <div class="row">
-          <div class="col-sm-3 drink-block" id="latte">拿鐵</div>
-          <div class="col-sm-3 drink-block">美式</div>
-          <div class="col-sm-3 drink-block">紅茶拿鐵</div>
-          <div class="col-sm-3 drink-block">藍莓歐雷</div>
+          <div class="col-sm-2 drink-block" id="latte">拿鐵</div>
+          <div class="col-sm-2 drink-block">美式</div>
+          <div class="col-sm-2 drink-block">紅茶拿鐵</div>
+          <div class="col-sm-2 drink-block">藍莓歐雷</div>
         </div>  
         <div class="row">使用者<input type="text" id="username"/></div>
         <div class="row">備註<input type="text" id="mark"/></div> 
@@ -26,7 +26,25 @@
           <button id="submit">submit</button>
           <button id="clear">clear</button>
         </div>
-       
+        <div class="row">
+          <div class="container">
+            購物車
+            <div class="row">
+              <table>
+                <thead>
+                  <tr>
+                    <td>品項</td>
+                    <td>數量</td>
+                  </tr>
+                </thead>
+                <tbody id ="selectedList">
+
+                </tbody>
+              </table>
+            </div>
+            
+          </div>
+        </div>
       </div>
 
       <script src="getAirTb.js"></script>
