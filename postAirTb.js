@@ -3,7 +3,6 @@ $.fn.doSubmit = function(){
     const date = new Date();
     const note = $('#note').val()
     
-    $(this).getCount()
     var text = "最終確認\n";
     for (const [drink, count] of Object.entries(selected_count)) {
         text += drink + " " + count + "杯\n"

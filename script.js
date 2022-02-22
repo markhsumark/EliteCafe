@@ -1,44 +1,30 @@
 var selected = [];
 var selected_count = {};
 var totalPrice = 0;
+var ih = "熱";
 
 const history = $("#records");
 
 $(document).ready(function(){
     // $(this).getAirtbData();
     $(this).getAirtbPrice();
-
-    //點餐動作
-    $(".drink-block").click(function(){
-        $("#selectedList").empty();
-        selected.push($(this).text());
-        $(this).getCount();
-        for (const [drink, count] of Object.entries(selected_count)) {
-            const tr = $("<tr></tr>");
-            const tdDrink = $("<td></td>").text(drink);
-            const tdCount = $("<td></td>").text(count);
-            const subtotal = localStorage.getItem(drink)*count;
-            const tdSubtotal = $("<td></td>").text(subtotal);
-            tr.append(tdDrink, tdCount, tdSubtotal);
-            $("#selectedList").append(tr);
-
-            totalPrice+= subtotal;
-            $("#total").text(totalPrice);
+    console.log("submit");
+    $("#submit").click(function(){
+        console.log("submit");
+        if($("#username").val() == ""){
+            alert("請輸入使用者");
+            return;
+        }else{
+            $(this).getCount();
+            $(this).doSubmit();
+            $(this).clear();
         }
     })
     $("#clear").click(function(){
         $(this).clear();
     })
-    $("#submit").click(function(){
-        if($("#username").val() == ""){
-            alert("請輸入使用者");
-            return;
-        }else{
-            $(this).doSubmit();
-            $(this).clear();
-        }
-        
-    })
+
+    
 })
 $.fn.clear = function(){
     selected = []
@@ -70,9 +56,48 @@ $.fn.setHistory = function(datetime, data){
     const time = year+"/"+month+"/"+date+"-"+hour+":"+min+":"+sec;
     const p = $("<p></p>").text(time+ "----"+ data);
     history.append(p);
-    localStorage.setItem(time, data);
+    const record = {'time': time, 'data': data};
+    localStorage.setItem('歷史紀錄', JSON.stringify(record));
+}
+$.fn.getHistory = function(){
+    const s = localStorage.getItem();
+    const p = $("<p></p>").text(s);
+    history.append(p);
+    
 }
 
-$.fn.setDrinkList = function(){
+//點餐動作
+function order(drink){
+    const drinkname = drink.innerHTML;
+    $("#selectedList").empty();
+    totalPrice = 0;
+    selected.push(drinkname);
+    $(this).getCount();
+    $(this).setCart();
+}
+function changeIH(IH){
+    ih = IH.innerHTML;
+    $("#ihShow").text(ih);
+    console.log("change IH to "+ ih);
+}
+$.fn.setCart = function(){
+    const drinksData = JSON.parse(localStorage.getItem('飲料'));
+    for (const [drink, count] of Object.entries(selected_count)) {
+        const tr = $("<tr></tr>");
+        const tdDrink = $("<td></td>").text(drink);
+        const tdCount = $("<td></td>").text(count);
+        const subtotal = drinksData[drink]*count;
+        const tdSubtotal = $("<td></td>").text(subtotal);
+        tr.append(tdDrink, tdCount, tdSubtotal);
+        $("#selectedList").append(tr);
 
+        totalPrice+= subtotal;
+        $("#total").text(totalPrice);
+    }
+}
+$.fn.addDrinkElem = function(drinkname){
+    const drinkBlock = $('<button></button>').text(drinkname);
+    drinkBlock.attr('class', 'drink-block btn btn-dark')
+    drinkBlock.attr('onclick', 'order(this)');
+    $('#drinkList').append(drinkBlock);
 }

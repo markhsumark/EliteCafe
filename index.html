@@ -15,17 +15,22 @@
     <center>
       <div id="root" class = "main container">
         <div class="row" id="drinkList">
-          <div class="col-sm-2 drink-block" id="latte">拿鐵</div>
-          <div class="col-sm-2 drink-block">美式</div>
-          <div class="col-sm-2 drink-block">紅茶拿鐵</div>
-          <div class="col-sm-2 drink-block">藍莓歐雷</div>
+
+          <div class="spinner-border"></div>
         </div>  
-        <div class="row">使用者<input type="text" id="username"/></div>
-        <div class="row">備註<input type="text" id="note"/></div> 
         <div class="row">
-          <button id="submit">submit</button>
-          <button id="clear">clear</button>
+          <div class="btn-group">
+            <button type="button" class="btn btn-outline-primary" id="I/H" onclick="changeIH(this)">冷</button>
+            <button type="button" class="btn btn-outline-danger"id="I/H"onclick="changeIH(this)">熱</button>
+            <p>選擇：<span id="ihShow">熱</span>(沒有功能)</p>
+          </div>
         </div>
+        <div class="row">
+          <span class="col-sm-2">登記人</span><input class="col-sm-3" type="text" id="username" placeholder="名字"/>
+        </div>
+        <div class="row">
+          <span class="col-sm-2">備註</span><input class="col-sm-2" type="text" id="note"/></div> 
+        <!-- 購物車部分 -->
         <hr>
         <div class="row">
           <div class="container">
@@ -51,8 +56,15 @@
             </div>
           </div>
         </div>
+        <div class="row">
+          <button id="submit" class="btn btn-primary">submit</button>
+          <button id="clear" class="btn btn-danger">clear</button>
+        </div>
         <hr>
+         <!-- 歷史紀錄部分 -->
+        <span class="">歷史紀錄</span><button class="btn btn-outline-dark ">清除歷史紀錄</button>
         <div id ="records">
+
 
         </div>
       </div>

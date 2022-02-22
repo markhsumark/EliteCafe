@@ -35,18 +35,22 @@ $.fn.getAirtbData = function(){
     });
 }
 
-// GET 飲品售價 並從在localStorage
+// GET 飲品、售價 並從在localStorage
 $.fn.getAirtbPrice = function(){
     base('售價').select({
         view: "Grid view",
     }).eachPage(function page(records, fetchNextPage){
+        var allDrinkData = {};
         records.forEach(function(record){
             const drinkName = record.get('品項');
             const drinkPrice = parseInt(record.get('價位'));
             console.log("售價：" + drinkName , drinkPrice);
-            localStorage.setItem(drinkName, drinkPrice);
-        
+            allDrinkData[drinkName]= drinkPrice;
+            $(this).addDrinkElem(drinkName);
         })
+        localStorage.setItem('飲料', JSON.stringify(allDrinkData));
+        $(".spinner-border").hide();
     })
+
 }
 
