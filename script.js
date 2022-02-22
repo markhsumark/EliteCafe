@@ -13,7 +13,7 @@ $(document).ready(function(){
     $("#submit").click(function(){
         console.log("submit");
         if($("#username").val() == ""){
-            alert("請輸入使用者");
+            alert("請輸入登記者姓名");
             return;
         }else{
             $(this).getCount();
