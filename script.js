@@ -2,6 +2,7 @@ var selected = [];
 var selected_count = {};
 var totalPrice = 0;
 var ih = "熱";
+var historyRecords = {};
 
 const history = $("#records");
 
@@ -23,6 +24,9 @@ $(document).ready(function(){
     $("#clear").click(function(){
         $(this).clear();
     })
+    if(localStorage.getItem("歷史紀錄")!== null){
+        $(this).getHistory();
+    }
 
     
 })
@@ -56,13 +60,17 @@ $.fn.setHistory = function(datetime, data){
     const time = year+"/"+month+"/"+date+"-"+hour+":"+min+":"+sec;
     const p = $("<p></p>").text(time+ "----"+ data);
     history.append(p);
-    const record = {'time': time, 'data': data};
-    localStorage.setItem('歷史紀錄', JSON.stringify(record));
+    historyRecords[time]= data;
+    localStorage.setItem('歷史紀錄', JSON.stringify(historyRecords));
 }
 $.fn.getHistory = function(){
-    const s = localStorage.getItem();
-    const p = $("<p></p>").text(s);
-    history.append(p);
+    console.log("get history");
+    const tempHR = localStorage.getItem("歷史紀錄");
+    historyRecords = JSON.parse(tempHR);
+    for(const [time, data] of Object.entries(historyRecords)){
+        const p = $("<p></p>").text(time+ "----"+ data);
+        history.append(p);
+    }
     
 }
 
