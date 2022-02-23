@@ -28,8 +28,14 @@ $(document).ready(function(){
         $(this).clear();
     })
     if(localStorage.getItem("歷史紀錄")!== null){
-        $(this).recoverHistory();
+        if(confirm("確定要清除下發的所有紀錄嗎？")){
+            $(this).recoverHistory();
+        } 
     }
+
+    $("#clHistory").click(function(){
+        $(this).clearHistory();
+    })
 
     
 })
@@ -113,6 +119,7 @@ $.fn.addDrinkElem = function(drinkname){
     $('#drinkList').append(drinkBlock);
 }
 
-$.fn.clHistory = function(){
-
+$.fn.clearHistory = function(){
+    localStorage.removeItem('歷史紀錄');
+    history.empty();
 }

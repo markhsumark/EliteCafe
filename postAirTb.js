@@ -35,10 +35,10 @@ $.fn.doSubmit = function(){
                     console.log(record.getId());
                 });
             });
-            
+            totalOrdered= totalOrdered.concat(drink);
+            totalOrdered= totalOrdered.concat("x", count)
         }
-        totalOrdered= totalOrdered.concat(drink);
-        totalOrdered= totalOrdered.concat("x", count);
+        ;
         const data = totalOrdered +" : 總共 $"+ totalPrice;
         $(this).addHistory(time, data);
     }
