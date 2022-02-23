@@ -19,6 +19,7 @@ $.fn.doSubmit = function(){
                 "fields": {
                     "時間": time,
                     "飲品": drink,
+                    "冷熱": "",
                     "數量": count,
                     "金額": drinksData[drink]*count,
                     "備註": note,
