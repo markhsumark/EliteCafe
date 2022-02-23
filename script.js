@@ -15,6 +15,9 @@ $(document).ready(function(){
         if($("#username").val() == ""){
             alert("請輸入登記者姓名");
             return;
+        }else if(totalPrice == 0){
+            alert("請點餐");
+            return;
         }else{
             $(this).getCount();
             $(this).doSubmit();
@@ -25,7 +28,7 @@ $(document).ready(function(){
         $(this).clear();
     })
     if(localStorage.getItem("歷史紀錄")!== null){
-        $(this).getHistory();
+        $(this).recoverHistory();
     }
 
     
@@ -50,7 +53,7 @@ $.fn.getCount = function(){
     console.log(selected_count)
 }
 
-$.fn.setHistory = function(datetime, data){
+$.fn.addHistory = function(datetime, data){
     const year = datetime.getFullYear();
     const month = datetime.getMonth() + 1;
     const date = datetime.getDate();
@@ -63,7 +66,7 @@ $.fn.setHistory = function(datetime, data){
     historyRecords[time]= data;
     localStorage.setItem('歷史紀錄', JSON.stringify(historyRecords));
 }
-$.fn.getHistory = function(){
+$.fn.recoverHistory = function(){
     console.log("get history");
     const tempHR = localStorage.getItem("歷史紀錄");
     historyRecords = JSON.parse(tempHR);
@@ -108,4 +111,8 @@ $.fn.addDrinkElem = function(drinkname){
     drinkBlock.attr('class', 'drink-block btn btn-dark')
     drinkBlock.attr('onclick', 'order(this)');
     $('#drinkList').append(drinkBlock);
+}
+
+$.fn.clHistory = function(){
+
 }
