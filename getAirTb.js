@@ -6,6 +6,7 @@ Airtable.configure({
     apiKey: AIRTABLE_API_KEY
 });
 var base = Airtable.base('app6O0zKUAqzHhqzV');
+
 $.fn.getAirtbData = function(){
     base('銷售紀錄').select({
     // Selecting the first 3 records in Grid view:

@@ -15,10 +15,8 @@ $.fn.doSubmit = function(){
         var allFields = []
         var totalOrdered = "";
         for (const [drink, count] of Object.entries(selected_count)) {
-            console.log(drink);
             subField = {
-                "field" : {
-                    "時間": time,
+                "fields" : {
                     "飲品": drink,
                     "冷熱": ih,
                     "數量": count,
@@ -27,6 +25,7 @@ $.fn.doSubmit = function(){
                     "登記人": username
                 }
             }
+            console.log(subField)
             allFields.push(subField);
             totalOrdered= totalOrdered.concat(drink);
             totalOrdered= totalOrdered.concat("(", ih, ")");
