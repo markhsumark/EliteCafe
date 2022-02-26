@@ -87,25 +87,38 @@ $.fn.recoverHistory = function(){
 
 //點餐動作
 function order(drink){
+    if($("#ihShow").text() == ""){
+        alert("請選擇冷熱")
+        return
+    }
     const drinkname = drink.innerHTML;
+    const order = drinkname + "/" + ih;
     $("#selectedList").empty();
-    totalPrice = 0;
-    selected.push(drinkname);
+    selected.push(order);
     $(this).getCount();
     $(this).setCart();
 }
 function changeIH(IH){
     ih = IH.innerHTML;
+    if(ih == "冰"){
+        $('#IHI').attr('class', 'btn btn-primary')
+        $('#IHH').attr('class', 'btn btn-outline-danger')
+    }else if(ih == "熱"){
+        $('#IHI').attr('class', 'btn btn-outline-primary')
+        $('#IHH').attr('class', 'btn btn-danger')
+    }
     $("#ihShow").text(ih);
     console.log("change IH to "+ ih);
 }
 $.fn.setCart = function(){
+    totalPrice = 0;
     const drinksData = JSON.parse(localStorage.getItem('飲料'));
     for (const [drink, count] of Object.entries(selected_count)) {
         const tr = $("<tr></tr>");
         const tdDrink = $("<td></td>").text(drink);
         const tdCount = $("<td></td>").text(count);
-        const subtotal = drinksData[drink]*count;
+        [drinkname, drinkIH] = drink.split("/")
+        const subtotal = drinksData[drinkname]*count;
         const tdSubtotal = $("<td></td>").text(subtotal);
         tr.append(tdDrink, tdCount, tdSubtotal);
         $("#selectedList").append(tr);

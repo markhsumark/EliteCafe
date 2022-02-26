@@ -15,10 +15,11 @@ $.fn.doSubmit = function(){
         var allFields = []
         var totalOrdered = "";
         for (const [drink, count] of Object.entries(selected_count)) {
+            [drinkname, drinkT] = drink.split("/");
             subField = {
                 "fields" : {
-                    "飲品": drink,
-                    "冷熱": ih,
+                    "飲品": drinkname,
+                    "冷熱": drinkT,
                     "數量": count,
                     "金額": drinksData[drink]*count,
                     "備註": note,
@@ -28,7 +29,6 @@ $.fn.doSubmit = function(){
             console.log(subField)
             allFields.push(subField);
             totalOrdered= totalOrdered.concat(drink);
-            totalOrdered= totalOrdered.concat("(", ih, ")");
             totalOrdered= totalOrdered.concat("x", count)
         }
         base('銷售紀錄').create(allFields, function(err, records) {
