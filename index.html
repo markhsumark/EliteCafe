@@ -5,73 +5,95 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>薈萃訪點餐頁面</title>
     <link href="style.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+
     <script src="./airtable.browser.js"></script>
   </head>
 
   <body>
     <center>
-      <div id="root" class = "main container">
-        <div class="row" id="drinkList">
 
-          <div class="spinner-border"></div>
-        </div>  
-        <div class="row">
-          <div class="btn-group">
-            <button type="button" class="btn btn-outline-primary" id="I/H" onclick="changeIH(this)">冷</button>
-            <button type="button" class="btn btn-outline-danger"id="I/H"onclick="changeIH(this)">熱</button>
-            <p>選擇：<span id="ihShow">熱</span>(沒有功能)</p>
-          </div>
-        </div>
-        <div class="row">
-          <span class="col-sm-2">登記人</span><input class="col-sm-3" type="text" id="username" placeholder="名字"/>
-        </div>
-        <div class="row">
-          <span class="col-sm-2">備註</span><input class="col-sm-2" type="text" id="note"/></div> 
-        <!-- 購物車部分 -->
-        <hr>
-        <div class="row">
-          <div class="container">
-            購物車
-            <div class="cart row">
-              <table>
-                <thead>
-                  <tr>
-                    <td>品項</td>
-                    <td>數量</td>
-                    <td>小計</td>
-                  </tr>
-                </thead>
-                <tbody id ="selectedList">
+		<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+			<a class="navbar-brand" href="index.html">點餐</a>
 
-                </tbody>
-                <tfoot>
-                  <tr>
-                    <td colspan =3 >Total: <span id="total" style="color:red">0</span></td>
-                  </tr>
-                </tfoot>
-              </table>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <button id="submit" class="btn btn-primary">submit</button>
-          <button id="clear" class="btn btn-danger">clear</button>
-        </div>
-        <hr>
-         <!-- 歷史紀錄部分 -->
-        <span class="">歷史紀錄</span><button class="btn btn-outline-dark " id ="clHistory">清除所有歷史紀錄</button>
-        <div id ="records">
-
-
-        </div>
-      </div>
-
-      <script src="getAirTb.js"></script>
-      <script src="postAirTb.js"></script>
-      <script src="script.js"></script>
-    </center>
-  </body>
-</html>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+			  	<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="collapsibleNavbar">
+				<ul class="navbar-nav">
+					<li class="nav-item">
+						<a class="nav-link" href="#">Link1</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">Link</a>
+					</li>  
+				</ul>
+			</div>  
+		  </nav>		  
+		  
+		  <div id="root" class = "main container">
+        
+			<div class="row" id="drinkList">
+	
+			  <div class="spinner-border"></div>
+			</div>  
+			<div class="row">
+			  <div class="btn-group">
+				<button type="button" class="btn btn-outline-primary" id="I/H" onclick="changeIH(this)">冷</button>
+				<button type="button" class="btn btn-outline-danger"id="I/H"onclick="changeIH(this)">熱</button>
+				<p>選擇：<span id="ihShow"></span></p>
+			  </div>
+			</div>
+			<div class="row">
+			  <span style="width: 70px;">登記人</span><input class="col-sm-3" type="text" id="username" placeholder="名字"/>
+			</div>
+			<div class="row">
+			  <span style="width: 70px;">備註</span><input class="col-sm-3" type="text" id="note"/></div> 
+			<!-- 購物車部分 -->
+			<hr>
+			<div class="row">
+			  <div class="container">
+				購物車
+				<div class="cart row">
+				  <table>
+					<thead>
+					  <tr>
+						<td>品項</td>
+						<td>數量</td>
+						<td>小計</td>
+					  </tr>
+					</thead>
+					<tbody id ="selectedList">
+	
+					</tbody>
+					<tfoot>
+					  <tr>
+						<td colspan =3 >Total: <span id="total" style="color:red">0</span></td>
+					  </tr>
+					</tfoot>
+				  </table>
+				</div>
+			  </div>
+			</div>
+			<div class="row">
+			  <button id="submit" class="btn btn-primary">點餐</button>
+			  <button id="clear" class="btn btn-danger">清空</button>
+			</div>
+			<hr>
+			 <!-- 歷史紀錄部分 -->
+			<span class="">歷史紀錄</span><button class="btn btn-outline-dark " id ="clHistory">清除所有歷史紀錄</button>
+			<div id ="records">
+	
+	
+			</div>
+		  </div>
+	
+		  <script src="getAirTb.js"></script>
+		  <script src="postAirTb.js"></script>
+		  <script src="script.js"></script>
+		</center>
+	  </body>
+	</html>

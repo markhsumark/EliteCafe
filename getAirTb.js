@@ -1,13 +1,11 @@
-const AIRTABLE_API_KEY = 'keydkLuej5kiWSXDO'
+const AIRTABLE_API_KEY = 'keyAOWkrD4cGjPUSj'
 
 var Airtable = require('airtable');
 Airtable.configure({
     endpointUrl: 'https://api.airtable.com',
     apiKey: AIRTABLE_API_KEY
 });
-// const app = document.getElementById('root');
-var base = Airtable.base('appZMeryAPbdoYdnn');
-
+var base = Airtable.base('app6O0zKUAqzHhqzV');
 $.fn.getAirtbData = function(){
     base('銷售紀錄').select({
     // Selecting the first 3 records in Grid view:
@@ -43,7 +41,7 @@ $.fn.getAirtbPrice = function(){
         var allDrinkData = {};
         records.forEach(function(record){
             const drinkName = record.get('品項');
-            const drinkPrice = parseInt(record.get('價位'));
+            const drinkPrice = parseInt(record.get('價格'));
             console.log("售價：" + drinkName , drinkPrice);
             allDrinkData[drinkName]= drinkPrice;
             $(this).addDrinkElem(drinkName);

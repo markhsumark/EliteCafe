@@ -4,9 +4,8 @@
     margin: 5px;
     padding: 10px;
 }
-#drinkList{
-    margin-left:auto; 
-    margin-right:auto;
+.row{
+    text-align: center;
 }
 .drink-block{
     background-color: white;

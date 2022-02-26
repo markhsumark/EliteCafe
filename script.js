@@ -1,7 +1,7 @@
 var selected = [];
 var selected_count = {};
 var totalPrice = 0;
-var ih = "熱";
+var ih = "";
 var historyRecords = {};
 
 const history = $("#records");
@@ -18,23 +18,25 @@ $(document).ready(function(){
         }else if(totalPrice == 0){
             alert("請點餐");
             return;
+        }else if(ih == ""){
+            alert("請選擇冷/熱");
+            return;
         }else{
             $(this).getCount();
             $(this).doSubmit();
-            $(this).clear();
         }
     })
     $("#clear").click(function(){
         $(this).clear();
     })
     if(localStorage.getItem("歷史紀錄")!== null){
-        if(confirm("確定要清除下發的所有紀錄嗎？")){
-            $(this).recoverHistory();
-        } 
+        $(this).recoverHistory();
     }
 
     $("#clHistory").click(function(){
-        $(this).clearHistory();
+        if(confirm("確定要清除下列的所有紀錄嗎？")){
+            $(this).clearHistory();
+        } 
     })
 
     
