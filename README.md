@@ -11,6 +11,6 @@
 - 檢視紀錄：查看已儲存在資料庫的紀錄
 
 ## 支援
-後端資料庫：[AirTable](https://www.airtable.com)（有提供API)
-前端：*html, javascript, jQuery, css*
+- 後端資料庫：[AirTable](https://www.airtable.com)（有提供API)
+- 前端：*html, javascript, jQuery, css*
 
