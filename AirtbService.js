@@ -91,13 +91,13 @@ $.fn.doSubmit = function(){
                 alert("登記失敗(雲端尚未更新)")
                 return;
             }
+            $(this).clear();
             records.forEach(function (record) {
                 console.log(record.getId());
             });
         });
-        
         const data = totalOrdered +" : 總共 $"+ totalPrice;
         $(this).addHistory(time, data);
-        $(this).clear();
+        
     }
 }
