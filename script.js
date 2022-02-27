@@ -62,10 +62,9 @@ $.fn.getCount = function(){
 }
 
 $.fn.addHistory = function(datetime, data){
-    const time = $(this).transDaytime(datetime);
-    const p = $("<p></p>").text(time+ "----"+ data);
+    const p = $("<p></p>").text(datetime+ "----"+ data);
     history.append(p);
-    historyRecords[time]= data;
+    historyRecords[datetime]= data;
     localStorage.setItem('歷史紀錄', JSON.stringify(historyRecords));
 }
 $.fn.recoverHistory = function(){
@@ -138,7 +137,6 @@ $.fn.transDaytime = function(datetime){
     const date = datetime.getDate();
     const hour = datetime.getHours();
     const min = datetime.getMinutes();
-    const sec = datetime.getSeconds();
-    const time = year+"/"+month+"/"+date+"-"+hour+":"+min+":"+sec;
+    const time = year+"/"+month+"/"+date+"-"+hour+":"+min;
     return time;
 }
