@@ -78,9 +78,7 @@ $.fn.transDaytime = function(datetime){
     const year = datetime.getFullYear();
     const month = datetime.getMonth() + 1;
     const date = datetime.getDate();
-    const hour = datetime.getHours();
-    const min = datetime.getMinutes();
-    const time = year+"/"+month+"/"+date+"-"+hour+":"+min;
+    const time = year+"/"+month+"/"+date;
     return time;
 }
 function changeInOut(IO){
