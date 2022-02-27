@@ -14,3 +14,4 @@
 - 後端資料庫：[AirTable](https://www.airtable.com)（有提供API)
 - 前端：*html, javascript, jQuery, css*
 
+# 如需使用請聯繫 徐易中（作者） email: tulse0415@gmail.com
