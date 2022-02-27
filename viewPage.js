@@ -6,9 +6,7 @@ $(document).ready(function() {
 $.fn.addRecordElem = function(record){
     var tr = $('<tr></tr>');
 
-    const daytime = $(this).transDaytime(new Date(record['時間']));
-    console.log(daytime);
-    const td1 = $('<td></td>').text(daytime);
+    const td1 = $('<td></td>').text(record['時間']);
     const td2 = $('<td></td>').text(record['飲品']);
     const td3 = $('<td></td>').text(record['冷熱']);
     const td4 = $('<td></td>').text(record['數量']);
