@@ -30,7 +30,7 @@ $.fn.getAirtbData = function(){
     }, function done(err) {
         if (err) { console.error(err); return; }
     });
-    
+    $('.spinner-border').remove();
 }
 
 // GET 飲品、售價 並從在localStorage
