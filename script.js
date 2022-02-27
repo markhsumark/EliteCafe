@@ -62,13 +62,7 @@ $.fn.getCount = function(){
 }
 
 $.fn.addHistory = function(datetime, data){
-    const year = datetime.getFullYear();
-    const month = datetime.getMonth() + 1;
-    const date = datetime.getDate();
-    const hour = datetime.getHours();
-    const min = datetime.getMinutes();
-    const sec = datetime.getSeconds();
-    const time = year+"/"+month+"/"+date+"-"+hour+":"+min+":"+sec;
+    const time = $(this).transDaytime(datetime);
     const p = $("<p></p>").text(time+ "----"+ data);
     history.append(p);
     historyRecords[time]= data;
@@ -137,4 +131,14 @@ $.fn.addDrinkElem = function(drinkname){
 $.fn.clearHistory = function(){
     localStorage.removeItem('歷史紀錄');
     history.empty();
+}
+$.fn.transDaytime = function(datetime){
+    const year = datetime.getFullYear();
+    const month = datetime.getMonth() + 1;
+    const date = datetime.getDate();
+    const hour = datetime.getHours();
+    const min = datetime.getMinutes();
+    const sec = datetime.getSeconds();
+    const time = year+"/"+month+"/"+date+"-"+hour+":"+min+":"+sec;
+    return time;
 }

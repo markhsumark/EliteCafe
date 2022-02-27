@@ -3,7 +3,7 @@
 $.fn.doSubmit = function(){
     var text = "最終確認\n";
     for (const [drink, count] of Object.entries(selected_count)) {
-        text += drink + "("+ ih+")"+ " " + count + "杯\n"
+        text += drink + " " + count + "杯\n"
     }
     text += "Total: "+ totalPrice;
     if(confirm(text) == true){
@@ -18,15 +18,16 @@ $.fn.doSubmit = function(){
             [drinkname, drinkT] = drink.split("/");
             subField = {
                 "fields" : {
+                    "時間": time,
                     "飲品": drinkname,
                     "冷熱": drinkT,
                     "數量": count,
-                    "金額": drinksData[drink]*count,
+                    "金額": drinksData[drinkname]*count,
                     "備註": note,
                     "登記人": username
                 }
             }
-            console.log(subField)
+            console.log(subField);
             allFields.push(subField);
             totalOrdered= totalOrdered.concat(drink);
             totalOrdered= totalOrdered.concat("x", count)
