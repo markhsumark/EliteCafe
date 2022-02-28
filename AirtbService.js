@@ -10,7 +10,8 @@ var base = Airtable.base('app6O0zKUAqzHhqzV');
 $.fn.getAirtbData = function(){
     base('1102銷售紀錄').select({
         maxRecords: 20,
-        view: "Grid view"
+        view: "Grid view",
+        sort: [{field: "時間", direction: "desc"}]
     }).eachPage(function page(records, fetchNextPage) {
         // This function (`page`) will get called for each page of records.
         records.forEach(function(record) {
