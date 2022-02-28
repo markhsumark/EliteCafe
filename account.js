@@ -16,6 +16,10 @@ $(document).ready(function(){
             alert('請輸入金額！');
         }else if($('#username').val() == ""){
             alert('請輸入登記人！');
+        }else if(parseInt($('#amount').val()) <= 0){
+            alert('金額不可為負！');
+        }else if(io == ""){
+            alert('請選擇收入或支出！');
         }else{
             $(this).doSubmit();
         }
@@ -26,7 +30,11 @@ $.fn.doSubmit = function(){
     
     const time = $(this).transDaytime(new Date());
     const item = $('#item').val();
-    const amount = parseInt($('#amount').val());
+    var amount = parseInt($('#amount').val());
+    if(io == '支出'){
+        amount *= -1;
+    }
+    
     const user = $('#username').val();
     const note = $('#note').val();
     // var selectedFile = $('#file').get(0).files[0];
