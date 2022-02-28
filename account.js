@@ -21,6 +21,7 @@ $(document).ready(function(){
         }else if(io == ""){
             alert('請選擇收入或支出！');
         }else{
+            alert('上傳中...')
             $(this).doSubmit();
         }
     })
