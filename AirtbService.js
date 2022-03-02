@@ -16,6 +16,7 @@ $.fn.getAirtbData = function(){
         // This function (`page`) will get called for each page of records.
         records.forEach(function(record) {
             var time = record.get('時間')
+            var date = record.get('日期')
             var drink = record.get('飲品')
             var IH = record.get('冷熱')
             var count = record.get('數量')
@@ -23,7 +24,13 @@ $.fn.getAirtbData = function(){
             var user = record.get('登記人')
             var note = record.get('備註')
             var subData = {'時間': time, '飲品': drink, '冷熱': IH, '數量': count, '金額': price, '登記人': user, '備註': note};
-            console.log(subData);
+            const now = new Date();
+            const recordDatetime = new Date(time);
+            console.log(now.getMonth()+ 1, now.getDate(), recordDatetime.getMonth()+1, recordDatetime.getDate())
+            if(now.getMonth()+ 1 > recordDatetime.getMonth()+1 ||  now.getDate() > recordDatetime.getDate() ){
+                return;
+            }
+
             $(this).addRecordElem(subData);
         });
         fetchNextPage();
@@ -51,6 +58,23 @@ $.fn.getAirtbPrice = function(){
         $(".spinner-border").hide();
     })
 
+}
+$.fn.getPersonalDutyData = function(input_name){
+    var points;
+    var dutyHours;
+    base('員工時數紀錄').select({
+        view: "Grid view",
+    }).eachPage(function page(records, fetchNextPage){
+        records.forEach(function(record){
+            const name = record.get('名字');
+            if(name == input_name){
+                points = parseInt(record.get('剩餘點數'));
+                dutyHours = parseInt(record.get('累計時數'));
+                return;
+            }
+        })
+    })
+    return {'剩餘點數': points, '累計時數': dutyHours};
 }
 
 // 帶優化：一次post上傳完成
