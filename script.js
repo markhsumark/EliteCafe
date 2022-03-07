@@ -18,16 +18,13 @@ $(document).ready(function(){
         }else if(totalPrice == 0){
             alert("請點餐");
             return;
-        }else if(ih == ""){
-            alert("請選擇冷/熱");
-            return;
         }else{
             $(this).getCount();
-            $(this).doSubmit();
+            $(this).postOrder();
         }
     })
-    $("#clear").click(function(){
-        $(this).clear();
+    $("#clearCart").click(function(){
+        $(this).clearCart();
     })
     if(localStorage.getItem("歷史紀錄")!== null){
         $(this).recoverHistory();
@@ -38,10 +35,27 @@ $(document).ready(function(){
             $(this).clearHistory();
         } 
     })
-
-    
+    $("#add2Cart").click(function(){
+        if($("#selDrink").text() == ""){
+            alert("請選擇飲品")
+            return
+        }else if($("#selIH").text() == ""){
+            alert("請選擇冷熱")
+            return
+        }
+        const order = $("#selDrink").text() + "/" + $("#selIH").text();
+        $("#selectedList").empty();
+        selected.push(order);
+        $(this).getCount();
+        $(this).setCart();
+    })
 })
-$.fn.clear = function(){
+
+function clearSel(){
+    $('#selDrink').text('');
+    $('#selIH').text('');
+}
+$.fn.clearCart = function(){
     selected = []
     selected_count = {};
     totalPrice = 0;
@@ -78,31 +92,7 @@ $.fn.recoverHistory = function(){
     
 }
 
-//點餐動作
-function order(drink){
-    if($("#ihShow").text() == ""){
-        alert("請選擇冷熱")
-        return
-    }
-    const drinkname = drink.innerHTML;
-    const order = drinkname + "/" + ih;
-    $("#selectedList").empty();
-    selected.push(order);
-    $(this).getCount();
-    $(this).setCart();
-}
-function changeIH(IH){
-    ih = IH.innerHTML;
-    if(ih == "冰"){
-        $('#IHI').attr('class', 'btn btn-primary')
-        $('#IHH').attr('class', 'btn btn-outline-danger')
-    }else if(ih == "熱"){
-        $('#IHI').attr('class', 'btn btn-outline-primary')
-        $('#IHH').attr('class', 'btn btn-danger')
-    }
-    $("#ihShow").text(ih);
-    console.log("change IH to "+ ih);
-}
+
 $.fn.setCart = function(){
     totalPrice = 0;
     const drinksData = JSON.parse(localStorage.getItem('飲料'));
@@ -111,7 +101,7 @@ $.fn.setCart = function(){
         const tdDrink = $("<td></td>").text(drink);
         const tdCount = $("<td></td>").text(count);
         [drinkname, drinkIH] = drink.split("/")
-        const subtotal = drinksData[drinkname]*count;
+        const subtotal = drinksData[drinkIH+drinkname]*count;
         const tdSubtotal = $("<td></td>").text(subtotal);
         tr.append(tdDrink, tdCount, tdSubtotal);
         $("#selectedList").append(tr);
@@ -123,8 +113,14 @@ $.fn.setCart = function(){
 $.fn.addDrinkElem = function(drinkname){
     const drinkBlock = $('<button></button>').text(drinkname);
     drinkBlock.attr('class', 'drink-block btn btn-dark')
-    drinkBlock.attr('onclick', 'order(this)');
+    drinkBlock.attr('onclick', 'doSelDrink(this)')
     $('#drinkList').append(drinkBlock);
+}
+function doSelDrink(el){ 
+    $('#selDrink').text(el.innerHTML);
+}
+function doSelIH(el){ 
+    $('#selIH').text(el.innerHTML);
 }
 
 $.fn.clearHistory = function(){

@@ -49,9 +49,12 @@ $.fn.getAirtbPrice = function(){
         var allDrinkData = {};
         records.forEach(function(record){
             const drinkName = record.get('品項');
-            const drinkPrice = parseInt(record.get('價格'));
-            console.log("售價：" + drinkName , drinkPrice);
-            allDrinkData[drinkName]= drinkPrice;
+            const drinkPriceH = parseInt(record.get('價格/熱'));
+            const drinkPriceI = parseInt(record.get('價格/冰'));
+            console.log("售價(熱)：" + drinkName , drinkPriceH);
+            console.log("售價(冷)：" + drinkName , drinkPriceI);
+            allDrinkData['熱' + drinkName]= drinkPriceH;
+            allDrinkData['冰'+drinkName]= drinkPriceI;
             $(this).addDrinkElem(drinkName);
         })
         localStorage.setItem('飲料', JSON.stringify(allDrinkData));
@@ -79,7 +82,7 @@ $.fn.getPersonalDutyData = function(input_name){
 
 // 帶優化：一次post上傳完成
 
-$.fn.doSubmit = function(){
+$.fn.postOrder = function(){
     var text = "最終確認\n";
     for (const [drink, count] of Object.entries(selected_count)) {
         text += drink + " " + count + "杯\n"
