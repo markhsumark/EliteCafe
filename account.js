@@ -71,15 +71,16 @@ $.fn.doSubmit = function(){
             }
         }
         ], function(err, records) {
-        if (err) {
-            alert("登記失敗(雲端尚未更新)")
-            return;
+            if (err) {
+                alert("登記失敗(雲端尚未更新)")
+                return;
+            }
+            alert('上傳成功')
+            records.forEach(function (record) {
+                console.log(record.getId());
+            });
         }
-        alert('上傳成功')
-        records.forEach(function (record) {
-            console.log(record.getId());
-        });
-    });
+    );
     
 }
 

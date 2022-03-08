@@ -65,6 +65,7 @@ $.fn.getAirtbPrice = function(){
 $.fn.getPersonalDutyData = function(input_name){
     var points;
     var dutyHours;
+    var check = false;
     base('員工時數紀錄').select({
         view: "Grid view",
     }).eachPage(function page(records, fetchNextPage){
@@ -73,11 +74,16 @@ $.fn.getPersonalDutyData = function(input_name){
             if(name == input_name){
                 points = parseInt(record.get('剩餘點數'));
                 dutyHours = parseInt(record.get('累計時數'));
+                console.log(points);
+                check = true
                 return;
             }
         })
+        if(check){
+            const data = {'剩餘點數': points, '累計時數': dutyHours};
+            $(this).setDutyDataElm(data);
+        }
     })
-    return {'剩餘點數': points, '累計時數': dutyHours};
 }
 
 // 帶優化：一次post上傳完成
@@ -97,6 +103,7 @@ $.fn.postOrder = function(){
         var allFields = []
         var totalOrdered = "";
         for (const [drink, count] of Object.entries(selected_count)) {
+            
             [drinkname, drinkT] = drink.split("/");
             subField = {
                 "fields" : {
@@ -104,7 +111,7 @@ $.fn.postOrder = function(){
                     "飲品": drinkname,
                     "冷熱": drinkT,
                     "數量": count,
-                    "金額": drinksData[drinkname]*count,
+                    "金額": drinksData[drinkT+drinkname]*count,
                     "備註": note,
                     "登記人": username
                 }
@@ -119,10 +126,10 @@ $.fn.postOrder = function(){
                 alert("登記失敗(雲端尚未更新)")
                 return;
             }
-            $(this).clear();
+            $(this).clearOrder();
             records.forEach(function (record) {
                 console.log(record.getId());
-            });
+              });
         });
         const data = totalOrdered +" : 總共 $"+ totalPrice;
         $(this).addHistory(time, data);
