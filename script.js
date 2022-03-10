@@ -76,7 +76,10 @@ $.fn.getCount = function(){
 }
 
 $.fn.addHistory = function(datetime, data){
+
+    const input = $('<input type="checkbox" data-toggle="toggle"></input>')
     const p = $("<p></p>").text(datetime+ "----"+ data);
+    p.append(input)
     history.append(p);
     historyRecords[datetime]= data;
     localStorage.setItem('歷史紀錄', JSON.stringify(historyRecords));
@@ -86,7 +89,9 @@ $.fn.recoverHistory = function(){
     const tempHR = localStorage.getItem("歷史紀錄");
     historyRecords = JSON.parse(tempHR);
     for(const [time, data] of Object.entries(historyRecords)){
+        const input = $('<input type="checkbox"  data-toggle="toggle"></input>')
         const p = $("<p></p>").text(time+ "----"+ data);
+        p.append(input)
         history.append(p);
     }
     
