@@ -38,22 +38,13 @@ $.fn.doSubmit = function(){
     
     const user = $('#username').val();
     const note = $('#note').val();
-    // var selectedFile = $('#file').get(0).files[0];
-    // console.log(URL.createObjectURL(selectedFile));
-    // const data = {
-    //     '時間': $(this).transDaytime(new Date()),
-    //     '收/支':io,
-    //     '項目':$('#item').val(),
-    //     '金額':parseInt($('#amount').val()),
-    //     '登記人':$('#username').val(),
-    //     '備註':$('#note').val(),
-    //     '收據':[
-    //         {
-    //             'url':URL.createObjectURL(selectedFile)
-    //         }
-    //     ]
-    // };
-    // console.log(data);
+    var ifReport = $('#if_report').val();
+    if(ifReport == 'on'){
+        ifReport = '可報帳';
+    }else{
+        ifReport = '不可報帳';
+    }
+    console.log(ifReport);
     base('1102收支紀錄').create([
         {    
             'fields':{
@@ -62,7 +53,8 @@ $.fn.doSubmit = function(){
                 '收/支':io,
                 '金額':amount,
                 '登記人':user,
-                '備註':note
+                '備註':note,
+                '可否報帳':ifReport
                 // '收據':[
                 //     {
                 //         'url':URL.createObjectURL(selectedFile)
