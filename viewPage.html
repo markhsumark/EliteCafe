@@ -15,6 +15,9 @@
 			background-color: rgb(255, 189, 82);
 			padding: 10px;
 		}
+		.row{
+			text-align: center;
+		}
 	</style>
   </head>
 
@@ -35,7 +38,7 @@
 						<a class="nav-link" href="index.html">點餐</a>
 					</li>
 					<li class="nav-item">
-                        <a class="nav-link" href="dutyPage.html">值班&員工杯</a>
+                        <a class="nav-link" href="dutyPage.html">紀錄員工杯</a>
                     </li>
 					<li class="nav-item">
 						<a class="nav-link" href="viewPage.html">檢視紀錄</a>
@@ -46,26 +49,28 @@
 				</ul>
 			</div>  
 		</nav>		  
-		 <h4>今日的紀錄</h4> 
-		  <div id="root" class = "main">
-			<table class="table table-dark table-hover">
-				<thead>
-					<tr>
-						<th>時間</th>
-						<th>飲品</th>
-						<th>冷熱</th>
-						<th>數量</th>
-						<th>金額</th>
-						<th>登記人</th>
-						<th>備註</th>
-					</tr>
-				</thead>
-				<tbody id = "records">
-					<div class="spinner-border"></div>
-				</tbody>
-			</table>
-          </div>
-		  <script src="AirtbService.js"></script>
-		  <script src="viewPage.js"></script>
+		  	<div id="root" class = "main">
+			  	<div class = 'row'>
+					<h4>今日的紀錄</h4> 
+				</div>
+				<table class="table table-dark table-hover">
+					<thead>
+						<tr>
+							<th>時間</th>
+							<th>飲品</th>
+							<th>冷熱</th>
+							<th>數量</th>
+							<th>金額</th>
+							<th>登記人</th>
+							<th>備註</th>
+						</tr>
+					</thead>
+					<tbody id = "records">
+						<div class="spinner-border" id="loader"></div>
+					</tbody>
+				</table>
+			</div>
+			<script src="AirtbService.js"></script>
+			<script src="viewPage.js"></script>
 	  </body>
 	</html>

@@ -8,6 +8,7 @@ Airtable.configure({
 var base = Airtable.base('app6O0zKUAqzHhqzV');
 
 $.fn.getAirtbData = function(){
+    $('#loader').show();
     base('1102銷售紀錄').select({
         maxRecords: 20,
         view: "Grid view",
@@ -30,15 +31,14 @@ $.fn.getAirtbData = function(){
             if(now.getMonth()+ 1 > recordDatetime.getMonth()+1 ||  now.getDate() > recordDatetime.getDate() ){
                 return;
             }
-
             $(this).addRecordElem(subData);
         });
         fetchNextPage();
+        $('#loader').hide();
 
     }, function done(err) {
         if (err) { console.error(err); return; }
     });
-    $('.spinner-border').remove();
 }
 
 // GET 飲品、售價 並從在localStorage
@@ -61,29 +61,6 @@ $.fn.getAirtbPrice = function(){
         $(".spinner-border").hide();
     })
 
-}
-$.fn.getPersonalDutyData = function(input_name){
-    var points;
-    var dutyHours;
-    var check = false;
-    base('員工時數紀錄').select({
-        view: "Grid view",
-    }).eachPage(function page(records, fetchNextPage){
-        records.forEach(function(record){
-            const name = record.get('名字');
-            if(name == input_name){
-                points = parseInt(record.get('剩餘點數'));
-                dutyHours = parseInt(record.get('累計時數'));
-                console.log(points);
-                check = true
-                return;
-            }
-        })
-        if(check){
-            const data = {'剩餘點數': points, '累計時數': dutyHours};
-            $(this).setDutyDataElm(data);
-        }
-    })
 }
 
 // 帶優化：一次post上傳完成
