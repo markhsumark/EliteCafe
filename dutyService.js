@@ -18,39 +18,6 @@ Airtable.configure({
 });
 var base = Airtable.base('app6O0zKUAqzHhqzV');
 
-$.fn.getAirtbData = function(){
-    $('#loader').show();
-    base('1102員工杯紀錄').select({
-        maxRecords: 20,
-        view: "Grid view",
-        sort: [{field: "時間", direction: "desc"}]
-    }).eachPage(function page(records, fetchNextPage) {
-        // This function (`page`) will get called for each page of records.
-        records.forEach(function(record) {
-            var time = record.get('時間')
-            var date = record.get('日期')
-            var drink = record.get('飲品')
-            var IH = record.get('冷熱')
-            var count = record.get('數量')
-            var price = record.get('金額')
-            var user = record.get('登記人')
-            var note = record.get('備註')
-            var subData = {'時間': time, '飲品': drink, '冷熱': IH, '數量': count, '金額': price, '登記人': user, '備註': note};
-            const now = new Date();
-            const recordDatetime = new Date(time);
-            console.log(now.getMonth()+ 1, now.getDate(), recordDatetime.getMonth()+1, recordDatetime.getDate())
-            if(now.getMonth()+ 1 > recordDatetime.getMonth()+1 ||  now.getDate() > recordDatetime.getDate() ){
-                return;
-            }
-            $(this).addRecordElem(subData);
-        });
-        fetchNextPage();
-        $('#loader').hide();
-
-    }, function done(err) {
-        if (err) { console.error(err); return; }
-    });
-}
 
 // GET 飲品、售價 並從在localStorage
 $.fn.getAirtbPrice = function(){
@@ -109,7 +76,7 @@ $.fn.postOrder = function(){
             totalOrdered= totalOrdered.concat(drink);
             totalOrdered= totalOrdered.concat("x", count)
         }
-        base('1102員工紀錄').create(allFields, function(err, records) {
+        base('1102員工杯紀錄').create(allFields, function(err, records) {
             if (err) {
                 alert("登記失敗(雲端尚未更新)")
                 return;
@@ -142,7 +109,7 @@ $(document).ready(function(){
         if($("#username").val() == ""){
             alert("請輸入登記者姓名");
             return;
-        }else if(totalPrice == 0){
+        }else if(selected_count == null){
             alert("請點餐");
             return;
         }else{
