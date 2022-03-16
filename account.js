@@ -38,7 +38,7 @@ $.fn.doSubmit = function(){
     
     const user = $('#username').val();
     const note = $('#note').val();
-    var ifReport = $('#if_report').val();
+    var ifReport = $('#if_report').is(":checked")
     if(ifReport == 'on'){
         ifReport = '可報帳';
     }else{
