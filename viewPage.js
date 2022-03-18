@@ -1,11 +1,12 @@
+var totalPrice = 0;
+
 $(document).ready(function() {
     $(this).getAirtbData();
 })
 
-
 $.fn.addRecordElem = function(record){
+    totalPrice += record['金額'];
     var tr = $('<tr></tr>');
-
     const td1 = $('<td></td>').text(record['時間']);
     const td2 = $('<td></td>').text(record['飲品']);
     const td3 = $('<td></td>').text(record['冷熱']);
@@ -16,6 +17,7 @@ $.fn.addRecordElem = function(record){
     tr.append(td1).append(td2).append(td3).append(td4).append(td5).append(td6).append(td7);
     $('#records').append(tr);
 
+    $('#total').text(totalPrice);
 }
 $.fn.transDaytime = function(datetime){
     const year = datetime.getFullYear();

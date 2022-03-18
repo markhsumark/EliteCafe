@@ -41,7 +41,7 @@
                         <a class="nav-link" href="dutyPage.html">紀錄員工杯</a>
                     </li>
 					<li class="nav-item">
-						<a class="nav-link" href="viewPage.html">檢視紀錄</a>
+						<a class="nav-link" href="viewPage.html">檢視點餐紀錄</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="viewDutyPage.html">檢視員工杯紀錄</a>
@@ -71,6 +71,11 @@
 					<tbody id = "records">
 						<div class="spinner-border" id="loader"></div>
 					</tbody>
+					<tfoot>
+						<tr>
+							<td colspan=7>總金額：<span id="total" ></span>	</td>
+						</tr>
+					</tfoot>
 				</table>
 			</div>
 			<script src="AirtbService.js"></script>
