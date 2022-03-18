@@ -28,10 +28,9 @@ $.fn.getAirtbData = function(){
             const now = new Date();
             const recordDatetime = new Date(time);
             console.log(now.getMonth()+ 1, now.getDate(), recordDatetime.getMonth()+1, recordDatetime.getDate())
-            if(now.getMonth()+ 1 > recordDatetime.getMonth()+1 ||  now.getDate() > recordDatetime.getDate() ){
-                return;
+            if(now.getMonth()+ 1 == recordDatetime.getMonth()+1 &&  now.getDate() == recordDatetime.getDate() ){
+                $(this).addRecordElem(subData);
             }
-            $(this).addRecordElem(subData);
         });
         fetchNextPage();
         $('#loader').hide();
