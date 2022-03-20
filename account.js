@@ -9,6 +9,7 @@ var base = Airtable.base('app6O0zKUAqzHhqzV');
 var io = "";
 
 $(document).ready(function(){
+    $(this).showReconciliation();
     $('#submit').click(function(){
         if($('#item').val() == ""){
             alert('請輸入項目！');
@@ -16,19 +17,98 @@ $(document).ready(function(){
             alert('請輸入金額！');
         }else if($('#username').val() == ""){
             alert('請輸入登記人！');
-        }else if(parseInt($('#amount').val()) <= 0){
+        }else if(parseInt($('#amount').val()) < 0){
             alert('金額不可為負！');
         }else if(io == ""){
             alert('請選擇收入或支出！');
         }else{
-            alert('上傳中...')
-            $(this).doSubmit();
+            alert('請等待上傳完成再關閉頁面')
+            $(this).postAccount();
+        }
+    })
+    $('#submit-reconciliation').click(function(){
+        if($('#amount-final').val() == null){
+            alert('請輸入金額！');
+        }else if($('#username-final').val() == ""){
+            alert('請輸入登記人！');
+        }else if(parseInt($('#amount-final').val()) < 0){
+            alert('金額不可為負！');
+        }else{
+            alert('請等待上傳完成再關閉頁面')
+            $(this).postReconciliation();
         }
     })
 })
-
-$.fn.doSubmit = function(){
+$.fn.postReconciliation = function(){
+    $('#loader').show();
+    const time = $(this).transDaytime(new Date());
+    var amount = parseInt($('#amount-final').val());
+    var amountTotal = parseInt($('#amount-total-final').val());
+    const user = $('#username-final').val();
+    const note = $('#note-final').val();
+    base('收班對帳紀錄').create([
+        {    
+            'fields':{
+                '時間': time,
+                '備用金金額':amount,
+                '總金額':amountTotal,
+                '登記人':user,
+                '備註':note,
+            }
+        }
+        ], function(err, records) {
+            if (err) {
+                alert("登記失敗(雲端尚未更新)")
+                $('#loader').hide();
+                return;
+            }
+            $('#loader').hide();
+            alert('上傳成功');
+            $(this).refrashReconciliation();
+            records.forEach(function (record) {
+                console.log(record.getId());
+            });
+        }
+    );
+}
+$.fn.refrashReconciliation = function(){
+    $('#last-amount').empty();
+    $(this).showReconciliation();
+}
+$.fn.showReconciliation = function(){
+    base('收班對帳紀錄').select({
+        // Selecting the first 3 records in Grid view:
+        maxRecords: 3,
+        view: "Grid view",
+        sort: [{field: "時間", direction: "desc"}]
+    }).eachPage(function page(records, fetchNextPage) {
+        // This function (`page`) will get called for each page of records.
     
+        records.forEach(function(record) {
+            const date = record.get('日期');
+            const amount = parseInt(record.get('備用金金額'));
+            const amountTotal = parseInt(record.get('總金額'));
+            const username = record.get('登記人');
+            const tr =$('<tr></tr>');
+            const td1 = $('<td></td>').text(date)
+            const td2 = $('<td></td>').text(amount)
+            const td3 = $('<td></td>').text(amountTotal)
+            const td4 = $('<td></td>').text(username)
+            tr.append(td1).append(td2).append(td3).append(td4);
+            $('#last-amount').append(tr);
+            console.log($('#last-amount'));
+        });
+    
+        // To fetch the next page of records, call `fetchNextPage`.
+        // If there are more records, `page` will get called again.
+        // If there are no more records, `done` will get called.
+        fetchNextPage();
+    
+    }, function done(err) {
+        if (err) { console.error(err); return; }
+    });
+}
+$.fn.postAccount = function(){
     const time = $(this).transDaytime(new Date());
     const item = $('#item').val();
     var amount = parseInt($('#amount').val());
@@ -75,7 +155,7 @@ $.fn.doSubmit = function(){
     );
     
 }
-
+//輸入DATE格式 回傳YYYY/MM/DD
 $.fn.transDaytime = function(datetime){
     const year = datetime.getFullYear();
     const month = datetime.getMonth() + 1;
