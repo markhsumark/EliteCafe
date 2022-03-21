@@ -36,7 +36,12 @@ $.fn.getAirtbData = function(){
         $('#loader').hide();
 
     }, function done(err) {
-        if (err) { console.error(err); return; }
+        if (err) { 
+            console.error(err); 
+            const error = $('<h3></h3>').text('伺服器錯誤')
+            $('body').append(error);
+            return; 
+        }
     });
 }
 
