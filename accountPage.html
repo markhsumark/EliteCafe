@@ -39,6 +39,14 @@
 			.btn{
 				margin:4px;
 			}
+			label{
+				width: 130px;
+				text-align: left;
+			}
+			input{
+				margin: 2px;
+				border-radius: 4px;
+			}
 		</style>
 	</head>
 
@@ -85,7 +93,7 @@
 						<div id="collapseOne" class="collapse" data-parent="#accordion">
 							<div class="card-body">
 								<div class="row">
-									<label style="width: 70px;">項目</label>
+									<label >項目</label>
 									<input class="col-sm-3" type="text" id="item" placeholder="收入或支出的事項"/>
 								</div>
 								<div class="row">
@@ -95,7 +103,7 @@
 									</div>
 								</div>
 								<div class="row">
-									<label style="width: 70px;">金額</label>
+									<label>金額</label>
 									<input class="col-sm-3" type="number" id="amount" placeholder="輸入非負整數" min="0"/>
 								</div> 
 								<!-- <div class="row">
@@ -103,15 +111,15 @@
 									<input class="col-sm-3" type="file" id="file"/>
 								</div> -->
 								<div class='row'>
-									<label style="width: 210px;">可否報帳(勾選->可報帳）</label>
+									<label style="width: auto" >可否報帳(勾選->可報帳）</label>
 									<input type="checkbox" data-toggle="toggle" id = 'if_report'></input>
 								</div>
 								<div class="row">
-									<label style="width: 70px;">登記人</label>
+									<label >登記人</label>
 									<input class="col-sm-3" type="text" id="username" placeholder="名字"/>
 								</div>
 								<div class="row">
-									<label style="width: 130px;">備註（非必填）</label>
+									<label >備註（非必填）</label>
 									<input class="col-sm-3" type="text" id="note" placeholder="(課程用/營業用...)"/>
 								</div> 
 								<div class="row">
@@ -147,19 +155,19 @@
 								</table>
 								<h5>登記區</h5>
 								<div class="row">
-									<label style="width: 100px;">備用金金額</label>
+									<label >備用金金額</label>
 									<input class="col-sm-3" type="number" id="amount-final" placeholder="輸入非負整數" min="0"/>
 								</div> 
 								<div class="row">
-									<label style="width: 70px;">總金額</label>
+									<label >總金額</label>
 									<input class="col-sm-3" type="number" id="amount-total-final" placeholder="輸入非負整數" min="0"/>
 								</div> 
 								<div class="row">
-									<label style="width: 70px;">登記人</label>
+									<label >登記人</label>
 									<input class="col-sm-3" type="text" id="username-final" placeholder="名字"/>
 								</div>
 								<div class="row">
-									<label style="width: 130px;">備註（非必填）</label>
+									<label>備註（非必填）</label>
 									<input class="col-sm-3" type="text" id="note-final" placeholder=""/>
 								</div> 
 								<div class="row">

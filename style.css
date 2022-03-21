@@ -1,10 +1,11 @@
 
 .main{
     background-color: rgb(255, 189, 82);
-    padding: 10px;
-}
+    padding: 15px;
+}   
 .row{
     text-align: center;
+    
 }
 .drink-block{
     background-color: white;
@@ -25,4 +26,15 @@ table{
     margin-left:auto; 
     margin-right:auto;
     text-align:center;
+}
+.btn{
+    margin:4px;
+}
+label{
+    width: 130px;
+    text-align: left;
+}
+input{
+    margin: 2px;
+    border-radius: 4px;
 }
