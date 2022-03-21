@@ -26,9 +26,8 @@ $.fn.getAirtbData = function(){
             var note = record.get('備註')
             var subData = {'時間': time, '飲品': drink, '冷熱': IH, '數量': count, '金額': price, '登記人': user, '備註': note};
             const now = new Date();
-            const recordDatetime = new Date(time);
-            console.log(now.getMonth()+ 1, now.getDate(), recordDatetime.getMonth()+1, recordDatetime.getDate())
-            if(now.getMonth()+ 1 == recordDatetime.getMonth()+1 &&  now.getDate() == recordDatetime.getDate() ){
+            var [year, month, day] = date.split('/')
+            if(now.getMonth()+ 1 == parseInt(month) &&  now.getDate() == parseInt(day) ){
                 $(this).addRecordElem(subData);
             }
         });
