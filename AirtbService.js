@@ -9,7 +9,7 @@ var base = Airtable.base('app6O0zKUAqzHhqzV');
 
 $.fn.getAirtbData = function(){
     $('#loader').show();
-    base('1102銷售紀錄').select({
+    base('銷售紀錄').select({
         maxRecords: 20,
         view: "Grid view",
         sort: [{field: "時間", direction: "desc"}]
@@ -101,7 +101,7 @@ $.fn.postOrder = function(){
             totalOrdered= totalOrdered.concat(drink);
             totalOrdered= totalOrdered.concat("x", count)
         }
-        base('1102銷售紀錄').create(allFields, function(err, records) {
+        base('銷售紀錄').create(allFields, function(err, records) {
             if (err) {
                 alert("登記失敗(雲端尚未更新)")
                 return;

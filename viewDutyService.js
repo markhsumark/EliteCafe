@@ -39,7 +39,7 @@ var base = Airtable.base('app6O0zKUAqzHhqzV');
 
 $.fn.getAirtbData = function(){
     $('#loader').show();
-    base('1102員工杯紀錄').select({
+    base('員工杯紀錄').select({
         view: "Grid view",
         sort: [{field: "時間", direction: "desc"}]
     }).eachPage(function page(records, fetchNextPage) {
