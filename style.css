@@ -11,8 +11,9 @@ body{
 }
 .drink-block{
     background-color: white;
-    border-radius:5px;
+    border-radius:7px;
     width: 120px;
+    height: 60px;
 }
 
 td{
