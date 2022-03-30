@@ -125,7 +125,7 @@ $.fn.postAccount = function(){
         ifReport = '不可報帳';
     }
     console.log(ifReport);
-    base('1102收支紀錄').create([
+    base('收支紀錄').create([
         {    
             'fields':{
                 '時間': time,
