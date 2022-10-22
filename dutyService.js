@@ -113,7 +113,7 @@ $(document).ready(function(){
             alert("請點餐");
             return;
         }else{
-            $(this).getCount();
+            $(this).refreshSelectedlist();
             $(this).postOrder();
         }
     })
@@ -140,7 +140,7 @@ $(document).ready(function(){
         const order = $("#selDrink").text() + "/" + $("#selIH").text();
         $("#selectedList").empty();
         selected.push(order);
-        $(this).getCount();
+        $(this).refreshSelectedlist();
         $(this).setCart();
     })
 })
@@ -157,7 +157,7 @@ $.fn.clearCart = function(){
     $("#selectedList").empty();
     console.log("clear");
 }
-$.fn.getCount = function(){
+$.fn.refreshSelectedlist = function(){
     selected_count = selected.reduce((obj,item)=>{
     if (item in obj) {
         obj[item]++
@@ -202,6 +202,7 @@ $.fn.setCart = function(){
         [drinkname, drinkIH] = drink.split("/")
         const subtotal = drinksData[drinkIH+drinkname]*count;
         const tdSubtotal = $("<td></td>").text(subtotal);
+
         tr.append(tdDrink, tdCount, tdSubtotal);
         $("#selectedList").append(tr);
 
@@ -210,6 +211,9 @@ $.fn.setCart = function(){
     }
 }
 $.fn.addDrinkElem = function(drinkname){
+    // const IceBtn = $('<button></button>').text("冰");
+    // IceBtn.attr('class', 'btn btn-primary')
+    // IceBtn.attr('onclick', "doSelDrink(this, drinkname)")
     const drinkBlock = $('<button></button>').text(drinkname);
     drinkBlock.attr('class', 'drink-block btn btn-dark')
     drinkBlock.attr('onclick', 'doSelDrink(this)')

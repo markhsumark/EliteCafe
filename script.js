@@ -19,7 +19,7 @@ $(document).ready(function(){
             alert("請點餐");
             return;
         }else{
-            $(this).getCount();
+            $(this).refreshSelectedlist();
             $(this).postOrder();
         }
     })
@@ -46,7 +46,7 @@ $(document).ready(function(){
         const order = $("#selDrink").text() + "/" + $("#selIH").text();
         $("#selectedList").empty();
         selected.push(order);
-        $(this).getCount();
+        $(this).refreshSelectedlist();
         $(this).setCart();
     })
 })
@@ -63,7 +63,7 @@ $.fn.clearCart = function(){
     $("#selectedList").empty();
     console.log("clear");
 }
-$.fn.getCount = function(){
+$.fn.refreshSelectedlist = function(){
     selected_count = selected.reduce((obj,item)=>{
     if (item in obj) {
         obj[item]++
@@ -108,7 +108,11 @@ $.fn.setCart = function(){
         [drinkname, drinkIH] = drink.split("/")
         const subtotal = drinksData[drinkIH+drinkname]*count;
         const tdSubtotal = $("<td></td>").text(subtotal);
-        tr.append(tdDrink, tdCount, tdSubtotal);
+        const delOrderBtn = $("<button></button>").text(' - ');
+        delOrderBtn.attr('id', drink);
+        delOrderBtn.attr('onclick', 'del1Order(this)');
+        const delOrder = $("<td></td>").append(delOrderBtn);
+        tr.append(tdDrink, tdCount, tdSubtotal, delOrder);
         $("#selectedList").append(tr);
 
         totalPrice+= subtotal;
@@ -140,4 +144,26 @@ $.fn.transDaytime = function(datetime){
     const min = datetime.getMinutes();
     const time = year+"/"+month+"/"+date+"-"+hour+":"+min;
     return time;
+}
+function del1Order(el){ 
+    const drinkname = el.id;
+
+    for(var i = 0; i<selected.length; i++){ 
+        const item = selected[i];
+        console.log("item:", item);
+        console.log("i:", i);
+        if(strcmp(item, drinkname)==0){
+            selected.splice(i, 1);
+            break; //循環終止
+        }
+    }
+    $("#selectedList").empty();
+    $(this).refreshSelectedlist();
+    $(this).setCart();
+    console.log(selected);
+}
+
+function strcmp ( str1, str2 ) {
+
+    return ( ( str1 == str2 ) ? 0 : ( ( str1 > str2 ) ? 1 : -1 ) );
 }
