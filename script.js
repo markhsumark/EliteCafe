@@ -111,6 +111,7 @@ $.fn.setCart = function(){
         const delOrderBtn = $("<button></button>").text(' - ');
         delOrderBtn.attr('id', drink);
         delOrderBtn.attr('onclick', 'del1Order(this)');
+        delOrderBtn.attr('class', 'btn btn-danger')
         const delOrder = $("<td></td>").append(delOrderBtn);
         tr.append(tdDrink, tdCount, tdSubtotal, delOrder);
         $("#selectedList").append(tr);
