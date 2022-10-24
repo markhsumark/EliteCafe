@@ -65,6 +65,28 @@ $.fn.getAirtbPrice = function(){
     })
 
 }
+$.fn.getDiscountData = function(){
+    var i = 0;
+    base('寄杯優惠').select({
+        view: "Grid view",
+    }).eachPage(function page(records, fetchNextPage){
+        var discountData = {};
+        records.forEach(function(record){
+            const name = record.get('名稱');
+            if(name != null){ 
+                const buyCondition = parseInt(record.get('買'));
+                const discount = parseInt(record.get('送'));
+                discountData['名稱']= name;
+                discountData['條件']= buyCondition;
+                discountData['優惠']= discount;
+                console.log(name)
+                $(this).addDiscountElem(name, i);
+            }
+        })
+        console.log(discountData)
+        localStorage.setItem('寄杯優惠資料', JSON.stringify(discountData));
+    })
+}
 
 // 帶優化：一次post上傳完成
 
@@ -108,7 +130,7 @@ $.fn.postOrder = function(tableName){
                         "金額": drinksData[drinkT+drinkname]*count,
                         "備註": note,
                         "登記人": username,
-                        "顧客電話號碼": phone_number
+                        "顧客資訊": phone_number
                     }
                 }
             }

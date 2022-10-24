@@ -8,6 +8,8 @@ const history = $("#records");
 
 $(document).ready(function(){
     // $(this).getAirtbData();
+    $(this).getDiscountData();
+
     $(this).getAirtbPrice();
     console.log("submit");
     $("#submit").click(function(){
@@ -142,6 +144,20 @@ $.fn.addDrinkElem = function(drinkname){
     drinkBlock.attr('onclick', 'doSelDrink(this)')
     $('#drinkList').append(drinkBlock);
 }
+$.fn.addDiscountElem = function(name, i){
+    const div = $('<div></div>');
+    div.attr('class', 'form-check');
+    const input = $('<input></input>');
+    input.attr('class', 'form-check-input')
+    input.attr('type', 'radio')
+    input.attr('id', 'Discount'+i)
+    const label = $('<label></label>');
+    label.attr('class', 'form-check-label')
+    label.attr('for', 'Discount'+i)
+    label.text(name);
+    div.append(input, label);
+    $('#discountList').append(div);
+}
 function doSelDrink(el){ 
     $('#selDrink').text(el.innerHTML);
 }
@@ -181,6 +197,5 @@ function del1Order(el){
 }
 
 function strcmp ( str1, str2 ) {
-
     return ( ( str1 == str2 ) ? 0 : ( ( str1 > str2 ) ? 1 : -1 ) );
 }
