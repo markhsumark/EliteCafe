@@ -20,7 +20,23 @@ $(document).ready(function(){
             return;
         }else{
             $(this).refreshSelectedlist();
-            $(this).postOrder();
+            $(this).postOrder('銷售紀錄');
+        }
+    })
+    $("#submit_remain_cup").click(function(){
+        console.log("submit");
+        if($("#username").val() == ""){
+            alert("請輸入登記者姓名");
+            return;
+        }else if(totalPrice == 0){
+            alert("請點餐");
+            return;
+        }else if($('#phone_number').val() == ''){
+            alert("輸入顧客電話號碼");
+            return;
+        }else{
+            $(this).refreshSelectedlist();
+            $(this).postOrder('寄杯紀錄');
         }
     })
     $("#clearCart").click(function(){

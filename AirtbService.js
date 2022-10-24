@@ -68,7 +68,7 @@ $.fn.getAirtbPrice = function(){
 
 // 帶優化：一次post上傳完成
 
-$.fn.postOrder = function(){
+$.fn.postOrder = function(tableName){
     var text = "最終確認\n";
     for (const [drink, count] of Object.entries(selected_count)) {
         text += drink + " " + count + "杯\n"
@@ -85,23 +85,40 @@ $.fn.postOrder = function(){
         for (const [drink, count] of Object.entries(selected_count)) {
             
             [drinkname, drinkT] = drink.split("/");
-            subField = {
-                "fields" : {
-                    "時間": time,
-                    "飲品": drinkname,
-                    "冷熱": drinkT,
-                    "數量": count,
-                    "金額": drinksData[drinkT+drinkname]*count,
-                    "備註": note,
-                    "登記人": username
+            if(tableName == '銷售紀錄'){
+                subField = {
+                    "fields" : {
+                        "時間": time,
+                        "飲品": drinkname,
+                        "冷熱": drinkT,
+                        "數量": count,
+                        "金額": drinksData[drinkT+drinkname]*count,
+                        "備註": note,
+                        "登記人": username
+                    }
+                }
+            }else if(tableName == '寄杯紀錄'){ 
+                const phone_number = $('#phone_number').val()
+                subField = {
+                    "fields" : {
+                        "時間": time,
+                        "飲品": drinkname,
+                        "冷熱": drinkT,
+                        "數量": count,
+                        "金額": drinksData[drinkT+drinkname]*count,
+                        "備註": note,
+                        "登記人": username,
+                        "顧客電話號碼": phone_number
+                    }
                 }
             }
-            console.log(subField);
+            
+            console.log('post: ', subField);
             allFields.push(subField);
             totalOrdered= totalOrdered.concat(drink);
             totalOrdered= totalOrdered.concat("x", count)
         }
-        base('銷售紀錄').create(allFields, function(err, records) {
+        base(tableName).create(allFields, function(err, records) {
             if (err) {
                 alert("登記失敗(雲端尚未更新)")
                 return;
