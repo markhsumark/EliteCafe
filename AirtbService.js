@@ -88,15 +88,11 @@ $.fn.getDiscountData = function(){
     })
 }
 
+
 // 帶優化：一次post上傳完成
 
 $.fn.postOrder = function(tableName){
-    var text = "最終確認\n";
-    for (const [drink, count] of Object.entries(selected_count)) {
-        text += drink + " " + count + "杯\n"
-    }
-    text += "Total: "+ totalPrice;
-    if(confirm(text) == true){
+    if(strcmp(tableName, '銷售紀錄') == 0){
         const drinksData = JSON.parse(localStorage.getItem('飲料'));
         const username = $('#username').val()
         const time = $(this).transDaytime(new Date());
@@ -107,7 +103,6 @@ $.fn.postOrder = function(tableName){
         for (const [drink, count] of Object.entries(selected_count)) {
             
             [drinkname, drinkT] = drink.split("/");
-            if(tableName == '銷售紀錄'){
                 subField = {
                     "fields" : {
                         "時間": time,
@@ -119,27 +114,11 @@ $.fn.postOrder = function(tableName){
                         "登記人": username
                     }
                 }
-            }else if(tableName == '寄杯紀錄'){ 
-                const phone_number = $('#phone_number').val()
-                subField = {
-                    "fields" : {
-                        "時間": time,
-                        "飲品": drinkname,
-                        "冷熱": drinkT,
-                        "數量": count,
-                        "金額": drinksData[drinkT+drinkname]*count,
-                        "備註": note,
-                        "登記人": username,
-                        "顧客資訊": phone_number
-                    }
-                }
-            }
-            
-            console.log('post: ', subField);
-            allFields.push(subField);
-            totalOrdered= totalOrdered.concat(drink);
-            totalOrdered= totalOrdered.concat("x", count)
         }
+        console.log('post: ', subField);
+        allFields.push(subField);
+        totalOrdered= totalOrdered.concat(drink);
+        totalOrdered= totalOrdered.concat("x", count)
         base(tableName).create(allFields, function(err, records) {
             if (err) {
                 alert("登記失敗(雲端尚未更新)")
@@ -148,10 +127,48 @@ $.fn.postOrder = function(tableName){
             $(this).clearOrder();
             records.forEach(function (record) {
                 console.log(record.getId());
-              });
+                });
         });
         const data = totalOrdered +" : 總共 $"+ totalPrice;
-        $(this).addHistory(time, data);
-        
+        $(this).addHistory(time, data); 
+    
+    }else if(strcmp(tableName,'寄杯紀錄') == 0){ 
+        const phone_number = $('#phone_number').val()
+        var discount_case = $('#discontSel').val();
+        const price = localStorage.getItem('寄杯優惠資料')[discount_case]
+        const username = $('#username').val()
+        const time = $(this).transDaytime(new Date());
+        const note = $('#note').val();
+        subField = {
+            "fields" : {
+                "時間": time,
+                "備註": note,
+                "金額": price,
+                "登記人": username,
+                "顧客資訊": phone_number,
+                "寄杯優惠方案": discount_case
+            }
+        }
+        allFields.push(subField);
+        base(tableName).create(allFields, function(err, records) {
+            if (err) {
+                alert("登記失敗(雲端尚未更新)")
+                return;
+            }
+        })
     }
+        
+}
+
+$.fn.transDaytime = function(datetime){
+    const year = datetime.getFullYear();
+    const month = datetime.getMonth() + 1;
+    const date = datetime.getDate();
+    const hour = datetime.getHours();
+    const min = datetime.getMinutes();
+    const time = year+"/"+month+"/"+date+"-"+hour+":"+min;
+    return time;
+}
+function strcmp ( str1, str2 ) {
+    return ( ( str1 == str2 ) ? 0 : ( ( str1 > str2 ) ? 1 : -1 ) );
 }

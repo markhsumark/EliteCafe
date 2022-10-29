@@ -8,8 +8,6 @@ const history = $("#records");
 
 $(document).ready(function(){
     // $(this).getAirtbData();
-    $(this).getDiscountData();
-
     $(this).getAirtbPrice();
     console.log("submit");
     $("#submit").click(function(){
@@ -22,23 +20,14 @@ $(document).ready(function(){
             return;
         }else{
             $(this).refreshSelectedlist();
-            $(this).postOrder('銷售紀錄');
-        }
-    })
-    $("#submit_remain_cup").click(function(){
-        console.log("submit");
-        if($("#username").val() == ""){
-            alert("請輸入登記者姓名");
-            return;
-        }else if(totalPrice == 0){
-            alert("請點餐");
-            return;
-        }else if($('#phone_number').val() == ''){
-            alert("輸入顧客電話號碼");
-            return;
-        }else{
-            $(this).refreshSelectedlist();
-            $(this).postOrder('寄杯紀錄');
+            var text = "最終確認\n";
+            for (const [drink, count] of Object.entries(selected_count)) {
+                text += drink + " " + count + "杯\n"
+            }
+            text += "Total: "+ totalPrice;
+            if(confirm(text) == true){
+                $(this).postOrder('銷售紀錄');
+            }
         }
     })
     $("#clearCart").click(function(){
@@ -144,20 +133,7 @@ $.fn.addDrinkElem = function(drinkname){
     drinkBlock.attr('onclick', 'doSelDrink(this)')
     $('#drinkList').append(drinkBlock);
 }
-$.fn.addDiscountElem = function(name, i){
-    const div = $('<div></div>');
-    div.attr('class', 'form-check');
-    const input = $('<input></input>');
-    input.attr('class', 'form-check-input')
-    input.attr('type', 'radio')
-    input.attr('id', 'Discount'+i)
-    const label = $('<label></label>');
-    label.attr('class', 'form-check-label')
-    label.attr('for', 'Discount'+i)
-    label.text(name);
-    div.append(input, label);
-    $('#discountList').append(div);
-}
+
 function doSelDrink(el){ 
     $('#selDrink').text(el.innerHTML);
 }
@@ -168,15 +144,6 @@ function doSelIH(el){
 $.fn.clearHistory = function(){
     localStorage.removeItem('歷史紀錄');
     history.empty();
-}
-$.fn.transDaytime = function(datetime){
-    const year = datetime.getFullYear();
-    const month = datetime.getMonth() + 1;
-    const date = datetime.getDate();
-    const hour = datetime.getHours();
-    const min = datetime.getMinutes();
-    const time = year+"/"+month+"/"+date+"-"+hour+":"+min;
-    return time;
 }
 function del1Order(el){ 
     const drinkname = el.id;
