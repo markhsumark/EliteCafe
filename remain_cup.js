@@ -32,5 +32,23 @@ function strcmp ( str1, str2 ) {
     return ( ( str1 == str2 ) ? 0 : ( ( str1 > str2 ) ? 1 : -1 ) );
 }
 $.fn.searchCostumerData =function(){
-    const discountData = localStorage.getItem('寄杯優惠資料');
+    const key = $('#search_number').val();
+    $('#result').empty();
+    $(this).getDiscountRecord(key);
+}
+$.fn.setResultList = function(result){ 
+    const tr = $("<tr></tr>");
+    const tdinfo = $("<td></td>").text(result['顧客資訊']);
+    const tdcase = $("<td></td>").text(result['優惠方案']);
+    const tdregister = $("<td></td>").text(result['登記人']);
+    const tdremain = $("<td></td>").text(result['剩餘兌換次數']);
+    const tdrecord = $("<td></td>").text(result['兌換紀錄']);
+    tr.append(tdinfo, tdcase, tdregister, tdremain, tdrecord);
+    $('#result').append(tr);
+}
+
+function select_discount(){
+    const sel = $('#discontSel').val();
+    console.log("!!!", sel);
+    $('#sel_text').text(sel);
 }

@@ -52,9 +52,13 @@
 		<h3>登記</h3>
 		<div class="form-group" id = "discountList">
 			<label for="discontSel">請選擇優惠:</label>
-			<select class="form-control" id="discontSel">
+			<select class="form-control" id="discontSel" onchange = "select_discount();">
+				<option>none</option>
 			</select>
 		  </div>
+		<div class="row">
+			以選擇:<span id="sel_text" style= "color:blue"></span>
+		</div>
 		<div class="row">
 			<span style="width: 70px;">登記人</span><input class="col-sm-3" type="text" id="username" placeholder="名字"/>
 		</div>
@@ -73,6 +77,22 @@
 		<div class="row">
 			<input type="text" id="search_number" placeholder="顧客資訊/電話號碼">
 			<button id="search" class="btn btn-primary">搜尋</button>
+		</div>
+		<div class="row">
+			<table>
+				<thead>
+				<tr>
+					<td>顧客資訊</td>
+					<td>優惠方案</td>
+					<td>登記人</td>
+					<td>剩餘兌換次數</td>
+					<td>兌換紀錄</td>
+				</tr>
+				</thead>
+				<tbody id ="result">
+
+				</tbody>
+			</table>
 		</div>
 	</div>
 

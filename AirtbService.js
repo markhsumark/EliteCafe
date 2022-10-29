@@ -76,8 +76,10 @@ $.fn.getDiscountData = function(){
             if(name != null){ 
                 const buyCondition = parseInt(record.get('買'));
                 const discount = parseInt(record.get('送'));
+                const price = parseInt(record.get('價格'));
                 discountData['名稱']= name;
                 discountData['條件']= buyCondition;
+                discountData['價格']= price;
                 discountData['優惠']= discount;
                 console.log(name)
                 $(this).addDiscountElem(name, i);
@@ -87,18 +89,43 @@ $.fn.getDiscountData = function(){
         localStorage.setItem('寄杯優惠資料', JSON.stringify(discountData));
     })
 }
+$.fn.getDiscountRecord = function(key){
+    var i = 0;
+    base('寄杯紀錄').select({
+        view: "Grid view",
+    }).eachPage(function page(records, fetchNextPage){
+        var discountRecord = {};
+        records.forEach(function(record){
+            const phone_number = record.get('顧客資訊');
+            if(strcmp(phone_number, key)==0){ 
+                const buyCondition = record.get('寄杯優惠方案');
+                const remainCount = parseInt(record.get('剩餘兌換次數'));
+                const register_person = record.get('登記人');
+                const exchangeCount = record.get('兌換紀錄');
+                discountRecord['顧客資訊']= phone_number;
+                discountRecord['優惠方案']= buyCondition;
+                discountRecord['剩餘兌換次數']= remainCount;
+                discountRecord['兌換紀錄']= exchangeCount;
+                discountRecord['登記人'] = register_person;
+            }
+            return;
+        })
+        console.log(discountRecord)
+        $(this).setResultList(discountRecord);
+    })
+}
 
 
 // 帶優化：一次post上傳完成
 
 $.fn.postOrder = function(tableName){
+    var subField = {}
+    var allFields = []
     if(strcmp(tableName, '銷售紀錄') == 0){
         const drinksData = JSON.parse(localStorage.getItem('飲料'));
         const username = $('#username').val()
         const time = $(this).transDaytime(new Date());
         const note = $('#note').val();
-        var subField = {}
-        var allFields = []
         var totalOrdered = "";
         for (const [drink, count] of Object.entries(selected_count)) {
             
