@@ -66,12 +66,14 @@ $.fn.getAirtbPrice = function(){
 
 }
 $.fn.getDiscountData = function(){
+    $('.spinner-border').show();
     var i = 0;
     base('寄杯優惠').select({
         view: "Grid view",
     }).eachPage(function page(records, fetchNextPage){
-        var discountData = {};
+        var discountDataList=[]
         records.forEach(function(record){
+            var discountData = {};
             const name = record.get('名稱');
             if(name != null){ 
                 const buyCondition = parseInt(record.get('買'));
@@ -81,12 +83,13 @@ $.fn.getDiscountData = function(){
                 discountData['條件']= buyCondition;
                 discountData['價格']= price;
                 discountData['優惠']= discount;
-                console.log(name)
-                $(this).addDiscountElem(name, i);
+                discountDataList.push(discountData)
+                $(this).addDiscountElem(name);
             }
         })
-        console.log(discountData)
-        localStorage.setItem('寄杯優惠資料', JSON.stringify(discountData));
+        console.log(discountDataList)
+        localStorage.setItem('寄杯優惠資料', JSON.stringify(discountDataList));
+        $('.spinner-border').hide();
     })
 }
 $.fn.getDiscountRecord = function(key){
@@ -94,25 +97,62 @@ $.fn.getDiscountRecord = function(key){
     base('寄杯紀錄').select({
         view: "Grid view",
     }).eachPage(function page(records, fetchNextPage){
-        var discountRecord = {};
         records.forEach(function(record){
             const phone_number = record.get('顧客資訊');
             if(strcmp(phone_number, key)==0){ 
+                var discountRecord = {};
+                const id = record.id;
                 const buyCondition = record.get('寄杯優惠方案');
-                const remainCount = parseInt(record.get('剩餘兌換次數'));
-                const register_person = record.get('登記人');
-                const exchangeCount = record.get('兌換紀錄');
+                var remainCount = parseInt(record.get('剩餘兌換次數'));
+
+                discountRecord['id'] = id;
                 discountRecord['顧客資訊']= phone_number;
                 discountRecord['優惠方案']= buyCondition;
                 discountRecord['剩餘兌換次數']= remainCount;
-                discountRecord['兌換紀錄']= exchangeCount;
-                discountRecord['登記人'] = register_person;
+
+                console.log(discountRecord)
+
+                $(this).setResultTable(discountRecord);
+                all_records.push(discountRecord);
             }
-            return;
         })
-        console.log(discountRecord)
-        $(this).setResultList(discountRecord);
+        if(all_records.length == 0){
+            alert('查無資料！')
+        }
+        
     })
+}
+
+$.fn.updateDiscountRecord = function(new_record){
+    const remainCount = new_record['剩餘兌換次數']
+    const id = new_record['id']
+    base('寄杯紀錄').update([
+        {
+          "id": id,
+          "fields": {
+            "剩餘兌換次數": remainCount
+          }
+        },
+      ], function(err, records) {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        records.forEach(function(record) {
+          console.log(record.get('時間'));
+        });
+      });
+}
+
+$.fn.deleteDiscountRecord = function(target_record){
+    const id = target_record['id']
+    base('寄杯紀錄').destroy([id], function(err, deletedRecords) {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        console.log('Deleted', deletedRecords.length, 'records');
+      });
 }
 
 
@@ -144,8 +184,8 @@ $.fn.postOrder = function(tableName){
         }
         console.log('post: ', subField);
         allFields.push(subField);
-        totalOrdered= totalOrdered.concat(drink);
-        totalOrdered= totalOrdered.concat("x", count)
+        totalOrdered+=drink;
+        totalOrdered+="x"
         base(tableName).create(allFields, function(err, records) {
             if (err) {
                 alert("登記失敗(雲端尚未更新)")
@@ -162,7 +202,9 @@ $.fn.postOrder = function(tableName){
     }else if(strcmp(tableName,'寄杯紀錄') == 0){ 
         const phone_number = $('#phone_number').val()
         var discount_case = $('#discontSel').val();
-        const price = localStorage.getItem('寄杯優惠資料')[discount_case]
+        
+        const price = getDiscountLocalDataByName(discount_case, '價格')
+        const remainCount = getDiscountLocalDataByName(discount_case, '條件') + getDiscountLocalDataByName(discount_case, '優惠')
         const username = $('#username').val()
         const time = $(this).transDaytime(new Date());
         const note = $('#note').val();
@@ -173,10 +215,12 @@ $.fn.postOrder = function(tableName){
                 "金額": price,
                 "登記人": username,
                 "顧客資訊": phone_number,
-                "寄杯優惠方案": discount_case
+                "寄杯優惠方案": discount_case,
+                "剩餘兌換次數": remainCount
             }
         }
         allFields.push(subField);
+        console.log(allFields);
         base(tableName).create(allFields, function(err, records) {
             if (err) {
                 alert("登記失敗(雲端尚未更新)")
