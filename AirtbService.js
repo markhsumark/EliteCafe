@@ -181,11 +181,15 @@ $.fn.postOrder = function(tableName){
                         "登記人": username
                     }
                 }
+                console.log('post: ', subField);
+                allFields.push(subField);
+                totalOrdered+=drink;
+                totalOrdered+="x"
         }
-        console.log('post: ', subField);
-        allFields.push(subField);
-        totalOrdered+=drink;
-        totalOrdered+="x"
+        // console.log('post: ', subField);
+        // allFields.push(subField);
+        // totalOrdered+=drink;
+        // totalOrdered+="x"
         base(tableName).create(allFields, function(err, records) {
             if (err) {
                 alert("登記失敗(雲端尚未更新)")
