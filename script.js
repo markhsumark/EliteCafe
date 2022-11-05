@@ -3,6 +3,8 @@ var selected_count = {};
 var totalPrice = 0;
 var ih = "";
 var historyRecords = {};
+var selDrink = ''
+var selIH = ''
 
 const history = $("#records");
 
@@ -41,20 +43,6 @@ $(document).ready(function(){
         if(confirm("確定要清除下列的所有紀錄嗎？")){
             $(this).clearHistory();
         } 
-    })
-    $("#add2Cart").click(function(){
-        if($("#selDrink").text() == ""){
-            alert("請選擇飲品")
-            return
-        }else if($("#selIH").text() == ""){
-            alert("請選擇冷熱")
-            return
-        }
-        const order = $("#selDrink").text() + "/" + $("#selIH").text();
-        $("#selectedList").empty();
-        selected.push(order);
-        $(this).refreshSelectedlist();
-        $(this).setCart();
     })
 })
 
@@ -124,22 +112,38 @@ $.fn.setCart = function(){
         $("#selectedList").append(tr);
 
         totalPrice+= subtotal;
-        $("#total").text(totalPrice);
     }
+    $("#total").text(totalPrice);
 }
 $.fn.addDrinkElem = function(drinkname){
-    const drinkBlock = $('<button></button>').text(drinkname);
-    drinkBlock.attr('class', 'drink-block btn btn-dark')
-    drinkBlock.attr('onclick', 'doSelDrink(this)')
-    $('#drinkList').append(drinkBlock);
+    const table = $('<table></table>').attr('class', 'drink-block')
+    const tr1 = $('<tr></tr>')
+    const tdname = $('<td></td>').attr('rowspan', '2').text(drinkname)
+    const tdice = $('<td>冰</td>').attr('class', 'ice')
+    tdice.attr('id', drinkname)
+    tdice.attr('onclick', 'doSelDrink(this)')
+    tr1.append(tdname, tdice)
+    
+    const tr2 = $('<tr></tr>')
+    const tdhot = $('<td>熱</td>').attr('class', 'hot')
+    tdhot.attr('id', drinkname)
+    tdhot.attr('onclick', 'doSelDrink(this)')
+    tr2.append(tdhot)
+    table.append(tr1, tr2)
+    // const drinkBlock = $('<button></button>').text(drinkname);
+    // drinkBlock.attr('class', 'drink-block btn btn-dark')
+    // drinkBlock.attr('onclick', 'doSelDrink(this)')
+    $('#drinkList').append(table);
 }
 
 function doSelDrink(el){ 
-    $('#selDrink').text(el.innerHTML);
+    const order = el.id + "/" + el.innerHTML;
+    $("#selectedList").empty();
+    selected.push(order);
+    $(this).refreshSelectedlist();
+    $(this).setCart();
 }
-function doSelIH(el){ 
-    $('#selIH').text(el.innerHTML);
-}
+
 
 $.fn.clearHistory = function(){
     localStorage.removeItem('歷史紀錄');
@@ -150,8 +154,6 @@ function del1Order(el){
 
     for(var i = 0; i<selected.length; i++){ 
         const item = selected[i];
-        console.log("item:", item);
-        console.log("i:", i);
         if(strcmp(item, drinkname)==0){
             selected.splice(i, 1);
             break; //循環終止

@@ -10,13 +10,23 @@ body{
     
 }
 .drink-block{
-    background-color: white;
+    background-color: rgb(91, 65, 0);
     border-radius:7px;
     width: 120px;
-    height: 60px;
+    height: 100px;
+    margin: 6px;
+    color: white;
+}
+.drink-block .ice{
+    width: 70px;
+    background-color: blue;
+}
+.drink-block .hot{
+    width: 70px;
+    background-color: red;
 }
 
-td{
+.cart td{
     width:100px;
     border: 2px solid;
     background-color: white;
@@ -25,10 +35,12 @@ td{
 .btn{
     margin: 5px;
 }
-table{
+.cart{
     margin-left:auto; 
     margin-right:auto;
     text-align:center;
+
+
 }
 label{
     width: 130px;

@@ -52,18 +52,7 @@
 		<div class="row" id="drinkList">
 			<div class="spinner-border "></div>
 		</div>  
-		<div class="row">
-			<div class="btn-group">
-				<button type="button" class="btn btn-primary" onclick="doSelIH(this)">冰</button>
-				<button type="button" class="btn btn-danger" onclick="doSelIH(this)">熱</button>
-			</div>
-		</div>
-		<div class="row">
-			<h4>目前選擇：<span id="selIH"></span>/<span id="selDrink"></span></h4><button class="btn btn-outline-dark" style="right:5px" onclick="clearSel()">clear</button>
-		</div>
-		<div class="row">
-			<button type="button" class="btn btn-info" id= "add2Cart">加入購物車</button>
-		</div>
+
 		<div class="row">
 			<span style="width: 70px;">登記人</span><input class="col-sm-3" type="text" id="username" placeholder="名字"/>
 		</div>
@@ -76,7 +65,7 @@
 			<div class="container">
 				購物車
 				<div class="row">
-					<table>
+					<table class = 'cart'>
 						<thead>
 						<tr>
 							<td>品項</td>
