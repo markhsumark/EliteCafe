@@ -45,8 +45,8 @@ $.fn.getAirtbData = function(){
 }
 
 // GET 飲品、售價 並從在localStorage
-$.fn.getAirtbPrice = function(){
-    base('售價').select({
+$.fn.getAirtbPrice = function(target_grid){
+    base(target_grid).select({
         view: "Grid view",
     }).eachPage(function page(records, fetchNextPage){
         var allDrinkData = {};
@@ -158,10 +158,10 @@ $.fn.deleteDiscountRecord = function(target_record){
 
 // 帶優化：一次post上傳完成
 
-$.fn.postOrder = function(tableName){
+$.fn.postOrder = function(target_grid){
     var subField = {}
     var allFields = []
-    if(strcmp(tableName, '銷售紀錄') == 0){
+    if(strcmp(target_grid, '銷售紀錄') == 0){
         const drinksData = JSON.parse(localStorage.getItem('飲料'));
         const username = $('#username').val()
         const time = $(this).transDaytime(new Date());
@@ -190,7 +190,7 @@ $.fn.postOrder = function(tableName){
         // allFields.push(subField);
         // totalOrdered+=drink;
         // totalOrdered+="x"
-        base(tableName).create(allFields, function(err, records) {
+        base(target_grid).create(allFields, function(err, records) {
             if (err) {
                 alert("登記失敗(雲端尚未更新)")
                 return;
@@ -203,7 +203,7 @@ $.fn.postOrder = function(tableName){
         const data = totalOrdered +" : 總共 $"+ totalPrice;
         $(this).addHistory(time, data); 
     
-    }else if(strcmp(tableName,'寄杯紀錄') == 0){ 
+    }else if(strcmp(target_grid,'寄杯紀錄') == 0){ 
         const phone_number = $('#phone_number').val()
         var discount_case = $('#discontSel').val();
         
@@ -231,6 +231,45 @@ $.fn.postOrder = function(tableName){
                 return;
             }
         })
+    }else if(strcmp(target_grid,'員工杯紀錄') == 0){
+        const drinksData = JSON.parse(localStorage.getItem('員工杯飲料'));
+        const username = $('#username').val()
+        const time = $(this).transDaytime(new Date());
+        const note = $('#note').val();
+        var subField = {}
+        var allFields = []
+        var totalOrdered = "";
+        for (const [drink, count] of Object.entries(selected_count)) {
+            
+            [drinkname, drinkT] = drink.split("/");
+            subField = {
+                "fields" : {
+                    "時間": time,
+                    "飲品": drinkname,
+                    "冷熱": drinkT,
+                    "數量": count,
+                    "金額": drinksData[drinkT+drinkname]*count,
+                    "備註": note,
+                    "登記人": username
+                }
+            }
+            console.log(subField);
+            allFields.push(subField);
+            totalOrdered= totalOrdered.concat(drink);
+            totalOrdered= totalOrdered.concat("x", count)
+        }
+        base(target_grid).create(allFields, function(err, records) {
+            if (err) {
+                alert("登記失敗(雲端尚未更新)")
+                return;
+            }
+            $(this).clearOrder();
+            records.forEach(function (record) {
+                console.log(record.getId());
+              });
+        });
+        const data = totalOrdered +" : 總共 $"+ totalPrice;
+        $(this).addHistory(time, data);
     }
         
 }
@@ -244,6 +283,124 @@ $.fn.transDaytime = function(datetime){
     const time = year+"/"+month+"/"+date+"-"+hour+":"+min;
     return time;
 }
+function strcmp ( str1, str2 ) {
+    return ( ( str1 == str2 ) ? 0 : ( ( str1 > str2 ) ? 1 : -1 ) );
+}
+
+
+$.fn.clearCart = function(){
+    selected = []
+    selected_count = {};
+    totalPrice = 0;
+    $("#total").text('0');
+    $("#selectedList").empty();
+    console.log("clear");
+}
+$.fn.refreshSelectedlist = function(){
+    selected_count = selected.reduce((obj,item)=>{
+    if (item in obj) {
+        obj[item]++
+    } else {
+        obj[item] = 1
+    }
+    return obj
+    },{})
+    console.log(selected_count)
+}
+
+$.fn.addHistory = function(datetime, data){
+
+    const input = $('<input type="checkbox" data-toggle="toggle"></input>')
+    const p = $("<p></p>").text(datetime+ "----"+ data);
+    p.append(input)
+    history.append(p);
+    historyRecords[datetime]= data;
+    localStorage.setItem('歷史紀錄', JSON.stringify(historyRecords));
+}
+$.fn.recoverHistory = function(){
+    console.log("get history");
+    const tempHR = localStorage.getItem("歷史紀錄");
+    historyRecords = JSON.parse(tempHR);
+    for(const [time, data] of Object.entries(historyRecords)){
+        const input = $('<input type="checkbox"  data-toggle="toggle"></input>')
+        const p = $("<p></p>").text(time+ "----"+ data);
+        p.append(input)
+        history.append(p);
+    }
+    
+}
+
+
+$.fn.setCart = function(){
+    totalPrice = 0;
+    const drinksData = JSON.parse(localStorage.getItem('飲料'));
+    for (const [drink, count] of Object.entries(selected_count)) {
+        const tr = $("<tr></tr>");
+        const tdDrink = $("<td></td>").text(drink);
+        const tdCount = $("<td></td>").text(count);
+        [drinkname, drinkIH] = drink.split("/")
+        const subtotal = drinksData[drinkIH+drinkname]*count;
+        const tdSubtotal = $("<td></td>").text(subtotal);
+        const delOrderBtn = $("<button></button>").text(' - ');
+        delOrderBtn.attr('id', drink);
+        delOrderBtn.attr('onclick', 'del1Order(this)');
+        delOrderBtn.attr('class', 'btn btn-danger')
+        const delOrder = $("<td></td>").append(delOrderBtn);
+        tr.append(tdDrink, tdCount, tdSubtotal, delOrder);
+        $("#selectedList").append(tr);
+
+        totalPrice+= subtotal;
+    }
+    $("#total").text(totalPrice);
+}
+$.fn.addDrinkElem = function(drinkname){
+    const table = $('<table></table>').attr('class', 'drink-block')
+    const tr1 = $('<tr></tr>')
+    const tdname = $('<td></td>').attr('rowspan', '2').text(drinkname)
+    const tdice = $('<td>冰</td>').attr('class', 'ice')
+    tdice.attr('id', drinkname)
+    tdice.attr('onclick', 'doSelDrink(this)')
+    tr1.append(tdname, tdice)
+    
+    const tr2 = $('<tr></tr>')
+    const tdhot = $('<td>熱</td>').attr('class', 'hot')
+    tdhot.attr('id', drinkname)
+    tdhot.attr('onclick', 'doSelDrink(this)')
+    tr2.append(tdhot)
+    table.append(tr1, tr2)
+    // const drinkBlock = $('<button></button>').text(drinkname);
+    // drinkBlock.attr('class', 'drink-block btn btn-dark')
+    // drinkBlock.attr('onclick', 'doSelDrink(this)')
+    $('#drinkList').append(table);
+}
+function doSelDrink(el){ 
+    const order = el.id + "/" + el.innerHTML;
+    $("#selectedList").empty();
+    selected.push(order);
+    $(this).refreshSelectedlist();
+    $(this).setCart();
+}
+$.fn.clearHistory = function(){
+    localStorage.removeItem('歷史紀錄');
+    history.empty();
+}
+
+function del1Order(el){ 
+    const drinkname = el.id;
+
+    for(var i = 0; i<selected.length; i++){ 
+        const item = selected[i];
+        if(strcmp(item, drinkname)==0){
+            selected.splice(i, 1);
+            break; //循環終止
+        }
+    }
+    $("#selectedList").empty();
+    $(this).refreshSelectedlist();
+    $(this).setCart();
+    console.log(selected);
+}
+
 function strcmp ( str1, str2 ) {
     return ( ( str1 == str2 ) ? 0 : ( ( str1 > str2 ) ? 1 : -1 ) );
 }

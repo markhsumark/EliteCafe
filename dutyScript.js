@@ -1,3 +1,17 @@
+
+/*
+ *   
+ * 與AirtableService.js&script.js 十分相近
+ * 差別在獲取資料的table
+ * 售價table：1102員工杯售價
+ * 紀錄table：1102員工杯紀錄
+ * 
+ */
+
+
+// 待優化：一次post上傳完成
+
+
 var selected = [];
 var selected_count = {};
 var totalPrice = 0;
@@ -7,14 +21,14 @@ const history = $("#records");
 
 $(document).ready(function(){
     // $(this).getAirtbData();
-    $(this).getAirtbPrice('售價');
+    $(this).getAirtbPrice('員工杯售價');
     console.log("submit");
     $("#submit").click(function(){
         console.log("submit");
         if($("#username").val() == ""){
             alert("請輸入登記者姓名");
             return;
-        }else if(totalPrice == 0){
+        }else if(selected_count == null){
             alert("請點餐");
             return;
         }else{
@@ -25,7 +39,7 @@ $(document).ready(function(){
             text += "Total: "+ totalPrice;
             if(confirm(text) == true){
                 $(this).refreshSelectedlist();
-                $(this).postOrder('銷售紀錄');
+                $(this).postOrder('員工杯紀錄');
                 $(this).clearCart()
             }
         }
